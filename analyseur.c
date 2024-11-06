@@ -2,18 +2,34 @@
 #include <pcap.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <netinet/in.h>
+#include <net/ethernet.h> // Détection IPv4 / IPv6 
 // i ou bien o
 // f optio
 // v pas obliger pas defaut
 void packet_handler(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char *packet){
     printf("Paquet capturé de longueur %d octets\n", pkthdr->len);
+    // Analyse de l'en-tête Ethernet
+    struct ether_header *eth_header = (struct ether_header *) packet;
+    if (ntohs(eth_header->ether_type) == ETHERTYPE_IP)
+    {
+        printf("IPv4\n");
+    }
+    else if (ntohs(eth_header->ether_type) == ETHERTYPE_IPV6){
+        printf("ipv6\n");
+    }
+    else if (ntohs(eth_header->ether_type) == ETHERTYPE_ARP){
+        printf("ARP\n");
+    }
+    
+
+
 }
 
 
 int main(int argc, char *argv[]){
     char errbuf[PCAP_ERRBUF_SIZE];
     char *interface, *file = NULL;
-    printf("%s, %s", interface, file);
     int verbosity=1;
     int opt;
     while ((opt = getopt(argc, argv, "i:o:f:v:")) != -1) {
@@ -39,37 +55,40 @@ int main(int argc, char *argv[]){
                 return 1;
         }
     }
+    pcap_t* capture_session;
+    if((interface == NULL && file == NULL) || (interface != NULL && file != NULL) ){
+        fprintf(stderr, "You need at least an interface or a file, but not both\n");
+        fprintf(stderr, "Usage: %s [-i interface] [-o file]\n", argv[0]);
+    }
+
     if(interface != NULL){
-
+        capture_session = pcap_open_live(interface, BUFSIZ, 1, 1000, errbuf); 
+        if (capture_session == NULL){
+            fprintf(stderr, "Erreur lors de la capture de tram: %s\n", errbuf);
+            pcap_if_t *alldevs;
+            // Récupérer la liste de toutes les interfaces
+            if (pcap_findalldevs(&alldevs, errbuf) == 0) {
+                pcap_if_t *device;
+                printf("Voici les interfaces discponibles utilisables :\n");
+                for (device = alldevs; device != NULL; device = device->next) {
+                    printf("- %s\n", device->name);  
+                }
+            }
+            pcap_freealldevs(alldevs);
+            return 1;
+        }
     }
-    pcap_if_t *alldevs;
-    
-    // Récupérer la liste de toutes les interfaces
-    if (pcap_findalldevs(&alldevs, errbuf) == -1) {
-        fprintf(stderr, "Erreur lors de la récupération des interfaces: %s\n", errbuf);
-        return 1;
+    else{
+        capture_session = pcap_open_offline(file, errbuf);
+        if(capture_session == NULL){
+            fprintf(stderr, "Error: file not found\n");
+            return 1;
+        }
     }
-
-    // pcap_if_t *device;
-    // printf("Interfaces disponibles :\n");
-    // for (device = alldevs; device != NULL; device = device->next) {
-    //     printf("%s", device->name);  
-    // }
-
-    const char* device = alldevs->name;
-    pcap_t* capture_session = pcap_open_live(device, BUFSIZ, 1, 1000, errbuf); 
-
-    if (capture_session == NULL){
-        fprintf(stderr, "Erreur lors de la capture de tram: %s\n", errbuf);
-        return 1;
-    }
-
+    //mettre à 0 à la place de 10 pour capture 'infini'
     if(pcap_loop(capture_session, 10, packet_handler, NULL) < 0){
-        fprintf(stderr, "error");
+        fprintf(stderr, "ERROr \n");
     }
-    
-
-    pcap_freealldevs(alldevs);
     pcap_close(capture_session);
     return 0;
 }
