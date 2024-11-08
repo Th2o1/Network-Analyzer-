@@ -7,15 +7,16 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <netinet/in.h>
-#include <netinet/ip.h> // Pour en-tête IP
-#include <net/ethernet.h> // Détection IPv4 / IPv6 
+#include <netinet/ip.h> // IP Header 
+#include <net/ethernet.h> // Detection IPv4 / IPv6 
+#include "transport_layer.h"
 
 
 //Fonction Header
 void parse_packet(const u_char *packet, int* verb);
-void parse_IPv4(struct ip *ip_header, int verbosity);
-void parse_IPv6(struct ip *ip_header, int verbosity);
-void parse_ARP(struct ip *ip_header, int verbosity);
+void parse_IPv4(const u_char *packet, int verbosity);
+void parse_IPv6(const u_char *packet, int verbosity);
+void parse_ARP(const u_char *packet, int verbosity);
 
 
 
