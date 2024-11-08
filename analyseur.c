@@ -1,31 +1,14 @@
-#include <stdio.h>
-#include <pcap.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <netinet/in.h>
-#include <net/ethernet.h> // Détection IPv4 / IPv6 
+#include "analyseur.h"
+
 // i ou bien o
 // f optio
 // v pas obliger pas defaut
-void packet_handler(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char *packet){
+
+void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u_char *packet){
     printf("Paquet capturé de longueur %d octets\n", pkthdr->len);
-    // Analyse de l'en-tête Ethernet
-    struct ether_header *eth_header = (struct ether_header *) packet;
-    if (ntohs(eth_header->ether_type) == ETHERTYPE_IP)
-    {
-        printf("IPv4\n");
-    }
-    else if (ntohs(eth_header->ether_type) == ETHERTYPE_IPV6){
-        printf("ipv6\n");
-    }
-    else if (ntohs(eth_header->ether_type) == ETHERTYPE_ARP){
-        printf("ARP\n");
-    }
-    
-
-
+    int *verb = (int *)verbosity;
+    parse_packet(packet, verb);
 }
-
 
 int main(int argc, char *argv[]){
     char errbuf[PCAP_ERRBUF_SIZE];
@@ -55,21 +38,21 @@ int main(int argc, char *argv[]){
                 return 1;
         }
     }
-    pcap_t* capture_session;
     if((interface == NULL && file == NULL) || (interface != NULL && file != NULL) ){
         fprintf(stderr, "You need at least an interface or a file, but not both\n");
         fprintf(stderr, "Usage: %s [-i interface] [-o file]\n", argv[0]);
     }
 
+    pcap_t* capture_session;
     if(interface != NULL){
         capture_session = pcap_open_live(interface, BUFSIZ, 1, 1000, errbuf); 
         if (capture_session == NULL){
-            fprintf(stderr, "Erreur lors de la capture de tram: %s\n", errbuf);
+            fprintf(stderr, "Error while capturing: %s\n", errbuf);
             pcap_if_t *alldevs;
             // Récupérer la liste de toutes les interfaces
             if (pcap_findalldevs(&alldevs, errbuf) == 0) {
                 pcap_if_t *device;
-                printf("Voici les interfaces discponibles utilisables :\n");
+                printf("Usable interface :\n");
                 for (device = alldevs; device != NULL; device = device->next) {
                     printf("- %s\n", device->name);  
                 }
@@ -86,8 +69,8 @@ int main(int argc, char *argv[]){
         }
     }
     //mettre à 0 à la place de 10 pour capture 'infini'
-    if(pcap_loop(capture_session, 10, packet_handler, NULL) < 0){
-        fprintf(stderr, "ERROr \n");
+    if(pcap_loop(capture_session, 10, packet_handler, (u_char *)&verbosity) < 0){
+        fprintf(stderr, "Error while calling loop \n");
     }
     pcap_close(capture_session);
     return 0;

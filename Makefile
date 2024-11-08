@@ -1,15 +1,15 @@
-# ./analuseyr en0
+# ./analyseur -i en0
 # Nom de l'exécutable
 EXEC = analyseur
 
 # Fichiers sources et objets
-SRC = analyseur.c
+SRC = analyseur.c link_layer.c  
 OBJ = $(SRC:.c=.o)
 
 # Options de compilation
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11
-LDFLAGS = -lpcap  # Ajout de la bibliothèque pcap
+LDFLAGS = -lpcap  #la bibliothèque pcap
 
 # Règle par défaut
 all: $(EXEC)
@@ -26,5 +26,9 @@ $(EXEC): $(OBJ)
 clean:
 	rm -f $(OBJ) $(EXEC)
 
-.PHONY: all clean
+# Test 
+test: $(EXEC)
+	./$(EXEC) -i en0
+
+.PHONY: test all clean
 
