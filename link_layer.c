@@ -4,7 +4,8 @@
 void parse_IPv4(const u_char *packet, int verbosity){
     struct ip* ip_header = (struct ip*)(packet + sizeof(struct ether_header));
     if (verbosity >= LOW) {
-        printf("IPv4 Packet from %s to %s\n", inet_ntoa(ip_header->ip_src), inet_ntoa(ip_header->ip_dst));
+        printf("IPv4 Packet from %s ", inet_ntoa(ip_header->ip_src));
+        printf("to %s\n", inet_ntoa(ip_header->ip_dst));
     }
     if (verbosity >= MEDIUM) {
         char* protocol = ip_header->ip_p == 6 ? "TCP" : "UDP"; //TCP has value 6 and UDP has value 17
@@ -33,7 +34,6 @@ void parse_packet(const u_char *packet, int* verb){
     struct ether_header *eth_header = (struct ether_header *) packet;
     if (ntohs(eth_header->ether_type) == ETHERTYPE_IP) // IPv4 case
     {
-        printf("IPv4\n");
         parse_IPv4(packet, *verb);
     }
     else if (ntohs(eth_header->ether_type) == ETHERTYPE_IPV6){ //IPv6 case

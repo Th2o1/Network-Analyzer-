@@ -5,7 +5,6 @@
 // v pas obliger pas defaut
 
 void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u_char *packet){
-    printf("Paquet capturé de longueur %d octets\n", pkthdr->len);
     int *verb = (int *)verbosity;
     parse_packet(packet, verb);
 }
@@ -69,7 +68,7 @@ int main(int argc, char *argv[]){
         }
     }
     //mettre à 0 à la place de 10 pour capture 'infini'
-    if(pcap_loop(capture_session, 10, packet_handler, (u_char *)&verbosity) < 0){
+    if(pcap_loop(capture_session, 0, packet_handler, (u_char *)&verbosity) < 0){
         fprintf(stderr, "Error while calling loop \n");
     }
     pcap_close(capture_session);
