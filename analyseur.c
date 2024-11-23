@@ -4,9 +4,25 @@
 // f optio
 // v pas obliger pas defaut
 
+void print_packet(const u_char *packet, int length) {
+    printf("Packet dump (length: %d bytes):\n", length);
+    for (int i = 0; i < length; i++) {
+        printf("%02x ", packet[i]);
+        
+        if ((i + 1) % 16 == 0) {
+            printf("\n");
+        }
+    }
+    if (length % 16 != 0) {
+        printf("\n");
+    }
+    printf("---------------------");
+}
+
 void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u_char *packet){
     int *verb = (int *)verbosity;
     parse_packet(packet, verb);
+    print_packet(packet, pkthdr->len); //Print raw packet (usefull for debuging)
 }
 
 int main(int argc, char *argv[]){

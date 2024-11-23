@@ -16,10 +16,13 @@
 
 
 // Function Header 
+
+// Check protocol
 void parse_protocol(u_char Protocol, const u_char *packet, int verbosity);
 void parse_tcp(const u_char *packet, int verbosity);
 void parse_udp(const u_char *packet, int verbosity);
 void parse_icmp(const u_char *packet, int verbosity);
+void check_tcp_flags(uint8_t flags); 
 
 #endif // TRANSPORT_LAYER
 
