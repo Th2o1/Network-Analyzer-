@@ -13,10 +13,11 @@
 
 
 //Fonction Header
-void parse_packet(const u_char *packet, int* verb);
-void parse_IPv4(const u_char *packet, int verbosity);
-void parse_IPv6(const u_char *packet, int verbosity);
-void parse_ARP(const u_char *packet, int verbosity);
+
+void parse_packet(const u_char *packet);
+void parse_IPv4(const u_char *packet);
+void parse_IPv6(const u_char *packet);
+void parse_ARP(const u_char *packet);
 
 
 

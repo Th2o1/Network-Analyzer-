@@ -1,133 +1,37 @@
 #include "transport_layer.h"
 
-// Print every flags of the tcp packet
-void check_tcp_flags(uint8_t flags) {
-    if(!(flags & TH_FLAGS)){
-        return;
-    }
-    printf("Flags:");
-    if (flags & TH_FIN) printf(" FIN");
-    if (flags & TH_SYN) printf(" SYN");
-    if (flags & TH_RST) printf(" RST");
-    if (flags & TH_PUSH) printf(" PSH");
-    if (flags & TH_ACK) printf(" ACK");
-    if (flags & TH_URG) printf(" URG");
-    if (flags & TH_ECE) printf(" ECE");
-    if (flags & TH_CWR) printf(" CWR");
 
-    
-}
-// Print all the option of tcp
-void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
-    printf("\n");
-    printf("%u ", options_size);
-    for(int i = 0; i<=options_size; i++){
-        printf("%02x ", tcp_options[i]);
-    }
-    printf("\n");
-    u_char kind;
-    u_char length;
-    char* option_name ="";
-    while (options_size > 0) {
-        u_char kind = *tcp_options;
-        length = *(tcp_options + 1);
-        switch (kind)
-        {
-        case TCPOPT_EOL: // End of option
-            option_name = "End of Options List (EOL)";
-            length = 1; //  No specif length
-            break;
-
-        case TCPOPT_NOP: // No operation
-            option_name = "No-Operation (NOP)";
-            length = 1; // No specif length
-            break;
-        case TCP_MAXSEG: //
-            option_name = "MSS ";
-            break;
-        case TCPOPT_WINDOW: // Window Scale
-            option_name = "Window Scale";
-            break;
-        case TCPOPT_SACK_PERMITTED: // SACK Permitted
-            option_name = "Selective Acknowledgment Permitted (SACK)";
-            break;
-        case TCPOPT_SACK: // SACK
-            option_name = "Selective Acknowledgment (SACK)";
-            break;
-        case TCPOPT_TIMESTAMP: // Timestamp
-            option_name = "Timestamp Option";
-            break;
-        default:
-            option_name = "Unknown Option";
-            length = *(tcp_options + 1);
-            if (options_size > 1) {
-                length = *(tcp_options + 1); 
-            } else {
-                length = 1; // Too avoid loop
-            }
-            break;
-        }
-        // Display the option
-        printf("Option: %s (Kind = %u, Length = %u)\n", option_name, kind, length);
-
-        // Check the length
-        if (length < 1 || length > options_size) {
-            printf("Erreur: Longueur d'option invalide (%u)\n", length);
-            break; // Avoid infinite loop
-        }
-        // Decrease size left and moving the pointer 
-        options_size -= length;
-        tcp_options += length;
-    }
-    return ;
-}
-
-void parse_tcp(const u_char *packet, int verbosity){
+void parse_tcp(const u_char *packet){
     struct tcphdr *tcp_header = (struct tcphdr *)packet;
-
-    //print raw packet for debugging purpose 
-    for (int i = 0; i < TCP_MAXHLEN; i++) {
-    printf("%02x ", packet[i]);
-    }
-    printf("\n");
-
-    printf("TC Source %u Destination %u ", 
-        ntohs(tcp_header->th_sport),ntohs(tcp_header->th_dport));
-    printf("Sequence %u Ack %u ", ntohl(tcp_header->th_seq), ntohl(tcp_header->th_ack));
-    printf("Data offset %u ", tcp_header->th_off);
-    check_tcp_flags(tcp_header->th_flags);
-    printf("Window %u Checksum %u Urgent Pointer %u ", 
-        tcp_header->th_win, tcp_header->th_sum, tcp_header->th_urp);
+    display_tcp_header(tcp_header);
     if(tcp_header->th_off > 5){
-        // We isolate the option of tcp 
         // tcp packet is 20 octet after that its only option
         const u_char* tcp_options = (const u_char*) tcp_header + 20;
         // Size in octet of the option
         unsigned int options_size = (tcp_header->th_off * 4) - 20;
-        printf("%u ", options_size);
-       check_tcp_options(tcp_options, options_size);
+        check_tcp_options(tcp_options, options_size);
     }
     printf("\n");
     return;
 }
-void parse_udp(const u_char *packet, int verbosity){
+void parse_udp(const u_char *packet){
     return; 
 }
-void parse_icmp(const u_char *packet, int verbosity){
+void parse_icmp(const u_char *packet){
     return; 
 }
 
-void parse_protocol(u_char protocol, const u_char *packet, int verbosity){
+void parse_protocol(u_char protocol, const u_char *packet){
     // we search wich protocol we have 
     switch (protocol) {
         case IPPROTO_TCP :// TCP
-            parse_tcp(packet, verbosity);
+            parse_tcp(packet);
             break;
         case IPPROTO_UDP: // UDP
-            parse_udp(packet, verbosity);
+            parse_udp(packet);
             break;
         case IPPROTO_ICMP: //IMCP
-            parse_icmp(packet, verbosity);
+            parse_icmp(packet);
             break;
     }
 }

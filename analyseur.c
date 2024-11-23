@@ -1,5 +1,7 @@
 #include "analyseur.h"
 
+extern int verbosity;
+
 // i ou bien o
 // f optio
 // v pas obliger pas defaut
@@ -20,15 +22,14 @@ void print_packet(const u_char *packet, int length) {
 }
 
 void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u_char *packet){
-    int *verb = (int *)verbosity;
-    parse_packet(packet, verb);
-    print_packet(packet, pkthdr->len); //Print raw packet (usefull for debuging)
+    parse_packet(packet);
+    //print_packet(packet, pkthdr->len); //Print raw packet (usefull for debuging)
 }
 
 int main(int argc, char *argv[]){
     char errbuf[PCAP_ERRBUF_SIZE];
     char *interface, *file = NULL;
-    int verbosity=1;
+    verbosity = 1;
     int opt;
     while ((opt = getopt(argc, argv, "i:o:f:v:")) != -1) {
     //Gestion des options de la commande 
