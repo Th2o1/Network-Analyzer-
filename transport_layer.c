@@ -11,13 +11,17 @@ void parse_tcp(const u_char *packet){
         unsigned int options_size = (tcp_header->th_off * 4) - 20;
         check_tcp_options(tcp_options, options_size);
     }
-    printf("\n");
     return;
 }
 void parse_udp(const u_char *packet){
     return; 
 }
 void parse_icmp(const u_char *packet){
+    printf("icmp");
+    return; 
+}
+void parse_icmpv6(const u_char *packet){
+    printf("icmpv6");
     return; 
 }
 
@@ -33,5 +37,7 @@ void parse_protocol(u_char protocol, const u_char *packet){
         case IPPROTO_ICMP: //IMCP
             parse_icmp(packet);
             break;
+        case IPPROTO_ICMPV6: //ICMPv6
+            parse_icmpv6(packet);
     }
 }

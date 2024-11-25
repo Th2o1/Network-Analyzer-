@@ -39,7 +39,6 @@ void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
             option_name = "End of Options List (EOL)";
             length = 1; //  No specif length
             break;
-
         case TCPOPT_NOP: // No operation
             option_name = "No-Operation (NOP)";
             length = 1; // No specif length
@@ -87,7 +86,8 @@ void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
 void display_tcp_header(struct tcphdr *tcp_header){
     printf("TCP Source %u Destination %u ", 
         ntohs(tcp_header->th_sport),ntohs(tcp_header->th_dport));
-    printf("Sequence %u Ack %u ", ntohl(tcp_header->th_seq), ntohl(tcp_header->th_ack));
+    printf("Sequence %u Ack %u ", 
+        ntohl(tcp_header->th_seq), ntohl(tcp_header->th_ack));
     printf("Data offset %u ", tcp_header->th_off);
     check_tcp_flags(tcp_header->th_flags);
     printf("Window %u Checksum %u Urgent Pointer %u ", 

@@ -1,5 +1,27 @@
 #include "link_layer.h"
 
+void parse_IPv6(const u_char *packet){
+    // Move the pointer to the IPv6 header
+    struct ip6_hdr *ipv6_header = (struct ip6_hdr *)(packet + sizeof(struct ether_header));
+    // Extract IPv6 base fields
+    char src_addr[INET6_ADDRSTRLEN];
+    char dst_addr[INET6_ADDRSTRLEN];
+    inet_ntop(AF_INET6, &ipv6_header->ip6_src, src_addr, sizeof(src_addr));
+    inet_ntop(AF_INET6, &ipv6_header->ip6_dst, dst_addr, sizeof(dst_addr));
+    
+    printf("IPv6 Packet from %s ", src_addr);
+    printf("to %s ", dst_addr);
+
+    printf("Payload length %u ",ipv6_header->ip6_plen);
+    printf("Hops Limits %u ",ipv6_header->ip6_hlim);
+    printf("Next Header %u ",ipv6_header->ip6_nxt);
+    parse_protocol(ipv6_header->ip6_nxt, packet+40);
+
+}
+
+void parse_ARP(const u_char *packet){
+
+}
 
 void parse_IPv4(const u_char *packet){
     struct ip* ip_header = (struct ip*)(packet + sizeof(struct ether_header));
@@ -41,7 +63,7 @@ void parse_eth(struct ether_header *eth_header){
     print_ether_address(eth_header->ether_dhost);
     printf(" > ");
     print_ether_address(eth_header->ether_shost);
-    printf(" type: %u ", eth_header->ether_type);
+    printf(" ");
 }
 
 void parse_packet(const u_char *packet){
@@ -53,9 +75,10 @@ void parse_packet(const u_char *packet){
         parse_IPv4(packet);
     }
     else if (ntohs(eth_header->ether_type) == ETHERTYPE_IPV6){ //IPv6 case
-        printf("ipv6\n");
+        parse_IPv6(packet);
     }
     else if (ntohs(eth_header->ether_type) == ETHERTYPE_ARP){ // ARP case 
         printf("ARP\n");
     }
+    printf("\n-----\n");
 }
