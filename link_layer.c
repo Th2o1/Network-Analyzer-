@@ -28,11 +28,26 @@ void parse_IPv4(const u_char *packet){
     */
 }
 
+void print_ether_address(const u_char* addr) {
+    for (int i = 0; i < ETHER_ADDR_LEN; i++) {
+        printf("%02x", addr[i]); // Display octet
+        if (i < ETHER_ADDR_LEN - 1) {
+            printf(":");
+        }
+    }
+}
 
+void parse_eth(struct ether_header *eth_header){
+    print_ether_address(eth_header->ether_dhost);
+    printf(" > ");
+    print_ether_address(eth_header->ether_shost);
+    printf(" type: %u ", eth_header->ether_type);
+}
 
 void parse_packet(const u_char *packet){
     // Analyse de l'en-tête Ethernet
     struct ether_header *eth_header = (struct ether_header *) packet;
+    parse_eth(eth_header);
     if (ntohs(eth_header->ether_type) == ETHERTYPE_IP) // IPv4 case
     {
         parse_IPv4(packet);
