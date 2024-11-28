@@ -8,8 +8,9 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <netinet/ip.h> // IP Header 
-#include <netinet/ip6.h>
+#include <netinet/ip6.h> // IPv6 Header
 #include <arpa/inet.h>
+#include <netinet/if_ether.h>
 #include <net/ethernet.h> // Detection IPv4 / IPv6 
 #include "transport_layer.h"
 

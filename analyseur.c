@@ -78,9 +78,10 @@ int main(int argc, char *argv[]){
         }
     }
     else{
+        printf("Reading from file: %s\n", file);
         capture_session = pcap_open_offline(file, errbuf);
         if(capture_session == NULL){
-            fprintf(stderr, "Error: file not found\n");
+            fprintf(stderr, "Error: %s with file %s \n", file, errbuf);
             return 1;
         }
     }

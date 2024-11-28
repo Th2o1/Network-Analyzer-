@@ -1,5 +1,21 @@
 #include "link_layer.h"
 
+void print_ether_address(const u_char* addr) {
+    for (int i = 0; i < ETHER_ADDR_LEN; i++) {
+        printf("%02x", addr[i]); // Display octet
+        if (i < ETHER_ADDR_LEN - 1) {
+            printf(":");
+        }
+    }
+    printf(" ");
+}
+void print_ip_address(u_char *address){
+    for(int i = 0; i < 4; i++){ 
+        printf("%d", address[i]); 
+        if(i!=3){printf(".");}
+    }
+}
+
 void parse_IPv6(const u_char *packet){
     // Move the pointer to the IPv6 header
     struct ip6_hdr *ipv6_header = (struct ip6_hdr *)(packet + sizeof(struct ether_header));
@@ -19,7 +35,47 @@ void parse_IPv6(const u_char *packet){
 
 }
 
+void parse_ARP_type(u_short ar_op){
+    switch (ar_op)
+    {
+    case ARPOP_REQUEST:
+        printf("REQUEST ");
+        break;
+    case ARPOP_REPLY:
+        printf("RESPONSE ");
+        break;
+    case ARPOP_REVREQUEST:
+        printf("REVERSE REQUEST");
+        break;
+    case ARPOP_REVREPLY:
+        printf("REVERSE REPLY ");
+        break;
+    case ARPOP_INVREQUEST:
+        printf("INVERSE REQUEST ");
+        break;
+    case ARPOP_INVREPLY:
+        printf("INVERSE REPLY ");
+        break;
+    default:
+        break;
+    }
+}
+
 void parse_ARP(const u_char *packet){
+    struct ether_arp *arp_header = (struct ether_arp *)(packet + sizeof(struct ether_header));
+    
+    printf("ARP ");
+    parse_ARP_type(ntohs(arp_header->arp_op)); //ntohs for conversion little / big endian if necessary
+    
+    printf("Target: MAC: ");
+    print_ether_address(arp_header->arp_tha); // Target MAC address
+    printf("IP: ");
+    print_ip_address(arp_header->arp_tpa); // Target IP address
+
+    printf(" Sender: MAC: ");
+    print_ether_address(arp_header->arp_sha); // Sender MAC address
+    printf("IP: ");
+    print_ip_address(arp_header->arp_spa); // Sender IP address
 
 }
 
@@ -50,20 +106,10 @@ void parse_IPv4(const u_char *packet){
     */
 }
 
-void print_ether_address(const u_char* addr) {
-    for (int i = 0; i < ETHER_ADDR_LEN; i++) {
-        printf("%02x", addr[i]); // Display octet
-        if (i < ETHER_ADDR_LEN - 1) {
-            printf(":");
-        }
-    }
-}
-
 void parse_eth(struct ether_header *eth_header){
     print_ether_address(eth_header->ether_dhost);
-    printf(" > ");
+    printf("> ");
     print_ether_address(eth_header->ether_shost);
-    printf(" ");
 }
 
 void parse_packet(const u_char *packet){
@@ -78,7 +124,7 @@ void parse_packet(const u_char *packet){
         parse_IPv6(packet);
     }
     else if (ntohs(eth_header->ether_type) == ETHERTYPE_ARP){ // ARP case 
-        printf("ARP\n");
+        parse_ARP(packet);
     }
     printf("\n-----\n");
 }

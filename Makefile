@@ -30,6 +30,8 @@ clean:
 test: $(EXEC)
 	./$(EXEC) -i en0
 
+test_arp: $(EXEC)
+	./$(EXEC) -o data/arp-storm.pcap
 
 
 
