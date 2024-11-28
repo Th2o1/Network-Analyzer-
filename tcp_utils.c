@@ -44,7 +44,7 @@ void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
             length = 1; // No specif length
             break;
         case TCP_MAXSEG: //
-            option_name = "MSS ";
+            option_name = "Max segs (MSS) ";
             break;
         case TCPOPT_WINDOW: // Window Scale
             option_name = "Window Scale";
