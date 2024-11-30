@@ -14,6 +14,9 @@ void parse_tcp(const u_char *packet){
     return;
 }
 void parse_udp(const u_char *packet){
+    struct udphdr *udp_header = (struct udphdr *)packet;
+    printf("Source Port: %u, Destination Port: %u ", ntohs(udp_header->uh_sport), ntohs(udp_header->uh_dport));
+    printf("UDP length : %u", ntohs(udp_header->uh_ulen));
     return; 
 }
 void parse_icmp(const u_char *packet){

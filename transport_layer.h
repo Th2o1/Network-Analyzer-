@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <netinet/tcp.h>
+#include <netinet/udp.h>
 #include "global_value.h"
 #include "tcp_utils.h"
 
