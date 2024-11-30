@@ -3,7 +3,7 @@
 EXEC = analyseur
 
 # Fichiers sources et objets
-SRC = analyseur.c link_layer.c transport_layer.c tcp_utils.c
+SRC = analyseur.c link_layer.c transport_layer.c arp_utils.c tcp_utils.c 
 OBJ = $(SRC:.c=.o)
 
 # Options de compilation
