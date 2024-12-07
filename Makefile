@@ -27,11 +27,19 @@ clean:
 	rm -f $(OBJ) $(EXEC)
 
 # Test 
-test: $(EXEC)
+start: $(EXEC)
 	./$(EXEC) -i en0
 
-test_arp: $(EXEC)
+arp: $(EXEC)
 	./$(EXEC) -o data/arp-storm.pcap
+ipv4: $(EXEC)
+	./$(EXEC) -o data/ipv4.pcap
+ipv4_tcp: $(EXEC)
+	./$(EXEC) -o data/IPv4_TCP.pcapng
+icmp: $(EXEC)
+	./$(EXEC) -o data/icmp.pcapng
+ipv6: $(EXEC)
+	./$(EXEC) -o data/v6.pcap
 
 
 
