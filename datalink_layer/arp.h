@@ -3,10 +3,9 @@
 
 #include <stdio.h>
 #include <pcap.h>
-#include <netinet/ip.h> // IP Header 
-#include <netinet/ip6.h> // IPv6 Header
 #include <arpa/inet.h>
 #include <netinet/if_ether.h>
+#include "ethernet.h"
 
 /**
  * @brief Parse and display the operation type of an ARP packet.
@@ -31,5 +30,27 @@ void print_ARP_protocol_format(u_short ar_pro);
  *               This indicates the type of hardware used (e.g., Ethernet, Token-ring).
  */
 void print_hardware_format(u_short ar_hrd);
+
+/**
+ * @brief Parse and display the content of an ARP packet.
+ *
+ * This function extracts and displays the details of an ARP packet, 
+ * including operation type, hardware address format, protocol format, 
+ * sender/target MAC and IP addresses, and the size of the MAC address field.
+ *
+ * @param packet A pointer to the raw packet data captured.
+ *
+ * The function assumes the packet begins with an Ethernet header 
+ * and directly processes the ARP header after the Ethernet portion.
+ * 
+ * Details displayed:
+ * - ARP operation type (e.g., request, reply).
+ * - Protocol address format (e.g., IPv4, IPv6).
+ * - Hardware address format (e.g., Ethernet).
+ * - Sender and target hardware (MAC) and protocol (IP) addresses.
+ * - Length of the hardware address field.
+ */
+void parse_ARP(const u_char *packet);
+
 
 #endif // ARP_PARSE

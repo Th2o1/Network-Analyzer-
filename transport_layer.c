@@ -1,18 +1,7 @@
 #include "transport_layer.h"
 
 
-void parse_tcp(const u_char *packet){
-    struct tcphdr *tcp_header = (struct tcphdr *)packet;
-    display_tcp_header(tcp_header);
-    if(tcp_header->th_off > 5){
-        // tcp packet is 20 octet after that its only option
-        const u_char* tcp_options = (const u_char*) tcp_header + 20;
-        // Size in octet of the option
-        unsigned int options_size = (tcp_header->th_off * 4) - 20;
-        check_tcp_options(tcp_options, options_size);
-    }
-    return;
-}
+
 void parse_udp(const u_char *packet){
     struct udphdr *udp_header = (struct udphdr *)packet;
     printf("UDP: ");
