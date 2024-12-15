@@ -1,5 +1,6 @@
 // Define for verbosity 
-
+#include <stdint.h>
+#include <stddef.h>
 // Low verbosity : very concise
 #define LOW 1 
 // Medium verbosity : synthetic
@@ -9,3 +10,17 @@
 
 // Give the level of verbosity needed (1 : low / 2 : medium / 3 : high)
 int verbosity;
+
+/**
+ * Calculates the Internet Checksum (16-bit one's complement) for a given buffer of data.
+ *
+ * @param vdata A pointer to the data buffer for which the checksum needs to be calculated.
+ *              This buffer should be of type `const void*` to ensure proper type safety.
+ * @param length The length of the data buffer in bytes.
+ *               It should be a multiple of 2, but the function handles odd-length buffers.
+ *
+ * @return A 16-bit checksum of the provided data.
+ *         This value is the one's complement of the sum of all 16-bit words in the data.
+ */
+uint16_t checksum_calc(const void *vdata, size_t length);
+    

@@ -2,8 +2,9 @@
 EXEC = analyseur
 DATALINK_FOLDER = datalink_layer/
 NETWORK_FOLDER = network_layer/
+TRANSPORT_FOLDER = transport_layer/
 # Source and object files
-SRC = analyseur.c packet_parsing.c $(wildcard $(DATALINK_FOLDER)*.c)  $(wildcard $(NETWORK_FOLDER)*.c) 
+SRC = analyseur.c packet_parsing.c utils.c $(wildcard $(DATALINK_FOLDER)*.c)  $(wildcard $(NETWORK_FOLDER)*.c) $(wildcard $(TRANSPORT_FOLDER)*.c)
 OBJ = $(SRC:.c=.o)
 
 # Compilation options
@@ -33,6 +34,9 @@ start: $(EXEC)
 # Run specific tests with predefined pcap files
 arp: $(EXEC)
 	./$(EXEC) -o data/arp-storm.pcap
+
+arp2: $(EXEC)
+	./$(EXEC) -o data/rarp_req_reply.pcapng
 
 ipv4: $(EXEC)
 	./$(EXEC) -o data/ipv4.pcap

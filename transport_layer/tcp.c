@@ -1,4 +1,4 @@
-#include "tcp_utils.h"
+#include "tcp.h"
 
 // Use all the other function to parse a TCP packet
 void parse_tcp(const u_char *packet){
@@ -107,6 +107,6 @@ void display_tcp_header(struct tcphdr *tcp_header){
         ntohl(tcp_header->th_seq), ntohl(tcp_header->th_ack));
     printf("Data offset %u ", tcp_header->th_off);
     check_tcp_flags(tcp_header->th_flags);
-    printf("Window %u Checksum %u Urgent Pointer %u ", 
-        tcp_header->th_win, tcp_header->th_sum, tcp_header->th_urp);
+    printf("Window %u Checksum %u (%s) Urgent Pointer %u ", 
+        tcp_header->th_win, tcp_header->th_sum, (checksum_calc(tcp_header, 20) == 0x0000) ? "valid" : "invalid" , tcp_header->th_urp);
 }
