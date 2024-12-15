@@ -1,6 +1,9 @@
 // Define for verbosity 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdint.h> // For uint8_t
+#include <stdio.h>  // For printf
+
 // Low verbosity : very concise
 #define LOW 1 
 // Medium verbosity : synthetic
@@ -23,4 +26,5 @@ int verbosity;
  *         This value is the one's complement of the sum of all 16-bit words in the data.
  */
 uint16_t checksum_calc(const void *vdata, size_t length);
+void print_packet(const unsigned char *packet, int length);
     

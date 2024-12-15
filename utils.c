@@ -24,3 +24,19 @@ uint16_t checksum_calc(const void *vdata, size_t length) {
     // complement to 1
     return ~sum;
 }
+
+// Debugging purpose 
+void print_packet(const unsigned char *packet, int length) {
+    printf("Packet dump (length: %d bytes):\n", length);
+    for (int i = 0; i < length; i++) {
+        printf("%02x ", packet[i]);
+        
+        if ((i + 1) % 16 == 0) {
+            printf("\n");
+        }
+    }
+    if (length % 16 != 0) {
+        printf("\n");
+    }
+    printf("---------------------");
+}
