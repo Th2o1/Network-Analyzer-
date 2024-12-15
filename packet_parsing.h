@@ -66,6 +66,6 @@ void parse_packet(const u_char *packet);
  *                 Example values include IPPROTO_TCP, IPPROTO_UDP.
  * @param packet   A pointer to the raw packet data for the given protocol.
  */
-void parse_protocol(u_char protocol, const u_char *packet);
+void parse_protocol(u_char protocol, const u_char *packet, size_t header_size);
 
 #endif // PACKET_PARSING
