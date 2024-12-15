@@ -1,9 +1,29 @@
 #include "tcp.h"
 
+
+
 // Use all the other function to parse a TCP packet
-void parse_tcp(const u_char *packet){
-    struct tcphdr *tcp_header = (struct tcphdr *)packet;
-    display_tcp_header(tcp_header);
+void parse_tcp(const u_char *packet, size_t header_size){
+
+    struct tcphdr *tcp_header = (struct tcphdr *)(packet + header_size);
+    //print_packet(packet, header_size+(tcp_header->th_off*4));
+    printf("TCP Source %u Destination %u ", 
+        ntohs(tcp_header->th_sport),ntohs(tcp_header->th_dport));
+    printf("Sequence %u Ack %u ", 
+        ntohl(tcp_header->th_seq), ntohl(tcp_header->th_ack));
+    printf("Data offset %u ", tcp_header->th_off);
+    printf("%u ", checksum_calc(tcp_header, header_size+(tcp_header->th_off*4)));
+    check_tcp_flags(tcp_header->th_flags);
+    // Print Window
+    printf("Window %u ", tcp_header->th_win);
+
+    // Print Checksum and its validity
+    printf("%u %d ", checksum_calc(packet, header_size + (tcp_header->th_off * 4)), header_size);
+    printf("Checksum %u (%s) ", tcp_header->th_sum, 
+           (checksum_calc(packet, header_size + (tcp_header->th_off * 4)) == 0x0000) ? "valid" : "invalid");
+
+    // Print Urgent Pointer
+    printf("Urgent Pointer %u\n", tcp_header->th_urp);
     if(tcp_header->th_off > 5){
         // tcp packet is 20 octet after that its only option
         const u_char* tcp_options = (const u_char*) tcp_header + 20;
@@ -14,12 +34,6 @@ void parse_tcp(const u_char *packet){
     return;
 }
 
-
-
-
-void tcp_print_raw(const u_char* tcp_options){
-   return;
-}
 
 // Print every flags of the tcp packet
 void check_tcp_flags(uint8_t flags) {
@@ -98,15 +112,4 @@ void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
         tcp_options += length;
     }
     return ;
-}
-
-void display_tcp_header(struct tcphdr *tcp_header){
-    printf("TCP Source %u Destination %u ", 
-        ntohs(tcp_header->th_sport),ntohs(tcp_header->th_dport));
-    printf("Sequence %u Ack %u ", 
-        ntohl(tcp_header->th_seq), ntohl(tcp_header->th_ack));
-    printf("Data offset %u ", tcp_header->th_off);
-    check_tcp_flags(tcp_header->th_flags);
-    printf("Window %u Checksum %u (%s) Urgent Pointer %u ", 
-        tcp_header->th_win, tcp_header->th_sum, (checksum_calc(tcp_header, 20) == 0x0000) ? "valid" : "invalid" , tcp_header->th_urp);
 }

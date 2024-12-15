@@ -49,6 +49,9 @@ icmp: $(EXEC)
 
 ipv6: $(EXEC)
 	./$(EXEC) -o data/v6.pcap
+udp: $(EXEC)
+	./$(EXEC) -o data/dhcp.pcap
+
 
 # Display help information
 help:

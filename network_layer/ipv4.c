@@ -59,7 +59,6 @@ void parse_IPv4(const u_char *packet){
     printf("Identification: %d ", ntohs(ip_header->ip_id)); // Identification
     check_ipv4_flags(ip_header);                          // Flag
     printf("TTL: %d ", ip_header->ip_ttl);                // Time to live
-    printf("Protocol: %d ", ip_header->ip_p);             // Protocol type
     // Checksum
     uint16_t calc_checksum = checksum_calc(ip_header, ip_header->ip_hl * 4);
     printf("Checksum: 0x%04x (%s) ",
@@ -69,6 +68,6 @@ void parse_IPv4(const u_char *packet){
     printf("Destination Address: %s ", inet_ntoa(ip_header->ip_dst)); // Destination IP address
     printf(") ");
 
-    parse_protocol(ip_header->ip_p, packet + (ip_header->ip_hl *4) + sizeof(struct ether_header));
+    parse_protocol(ip_header->ip_p, ip_header,  (ip_header->ip_hl *4));
     
 }

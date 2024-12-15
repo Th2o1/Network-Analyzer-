@@ -23,6 +23,6 @@ void parse_IPv6(const u_char *packet){
 
     printf(") ");
 
-    parse_protocol(ipv6_header->ip6_nxt, packet+40);
+    parse_protocol(ipv6_header->ip6_nxt, packet, 40);
 
 }

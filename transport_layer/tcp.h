@@ -49,5 +49,5 @@ void check_tcp_options(const u_char* tcp_options, unsigned int options_size);
  */
 void display_tcp_header(struct tcphdr* tcp_header);
 
-void parse_tcp(const u_char *packet);
+void parse_tcp(const u_char *packet, size_t size_header);
 #endif // TCP_PARSE

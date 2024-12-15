@@ -5,8 +5,8 @@
 #include <pcap.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <netinet/tcp.h>
 #include <netinet/udp.h>
+#include <netinet/tcp.h>
 #include <netinet/ip_icmp.h> 
 #include <netinet/icmp6.h>
 #include "global_value.h"
