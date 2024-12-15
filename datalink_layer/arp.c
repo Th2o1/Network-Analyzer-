@@ -18,7 +18,7 @@ void parse_ARP_operation(u_short ar_op){
         printf("RESPONSE ");
         break;
     case ARPOP_REVREQUEST:
-        printf("REVERSE REQUEST");
+        printf("REVERSE REQUEST ");
         break;
     case ARPOP_REVREPLY:
         printf("REVERSE REPLY ");
@@ -38,31 +38,31 @@ void print_ARP_protocol_format(u_short ar_pro) {
     printf("Protocol address format : 0x%04x - ", ar_pro);
     switch (ar_pro) {
         case 0x0800: // IPv4
-            printf("IPv4\n");
+            printf("IPv4 ");
             break;
         case 0x86DD: // IPv6
-            printf("IPv6\n");
+            printf("IPv6 ");
             break;
         case 0x0806: // ARP 
-            printf("ARP\n");
+            printf("ARP ");
             break;
         case 0x8035: // RARP
-            printf("Reverse ARP (RARP)\n");
+            printf("Reverse ARP (RARP) ");
             break;
         case 0x88CC: // LLDP
-            printf("Link Layer Discovery Protocol (LLDP)\n");
+            printf("Link Layer Discovery Protocol (LLDP) ");
             break;
         case 0x8100: // VLAN Tagging (802.1Q)
-            printf("VLAN Tagging (802.1Q)\n");
+            printf("VLAN Tagging (802.1Q) ");
             break;
         case 0x8847: // MPLS Unicast
-            printf("MPLS (Unicast)\n");
+            printf("MPLS (Unicast) ");
             break;
         case 0x8848: // MPLS Multicast
-            printf("MPLS (Multicast)\n");
+            printf("MPLS (Multicast) ");
             break;
         default:
-            printf("Unknown or custom protocol format\n");
+            printf("Unknown or custom protocol format ");
             break;
     }
 }
@@ -94,10 +94,10 @@ void parse_ARP(const u_char *packet){
     struct ether_arp *arp_header = (struct ether_arp *)(packet + sizeof(struct ether_header));
     
     printf("ARP ");
-    parse_ARP_operation(ntohs(arp_header->arp_op)); //ntohs for conversion little / big endian if necessary
-    
-    print_ARP_protocol_format(ntohs(arp_header->arp_pro));
     print_hardware_format(ntohs(arp_header->arp_hrd));
+    print_ARP_protocol_format(ntohs(arp_header->arp_pro));
+
+    parse_ARP_operation(ntohs(arp_header->arp_op)); //ntohs for conversion little / big endian if necessary
     printf("Target: MAC: ");
     print_ether_address(arp_header->arp_tha); // Target MAC address
     printf("IP: ");
@@ -109,4 +109,10 @@ void parse_ARP(const u_char *packet){
     print_ip_address(arp_header->arp_spa); // Sender IP address
 
     printf("Size of MAC address %d", arp_header->arp_hln);
+
+
 }
+
+
+
+
