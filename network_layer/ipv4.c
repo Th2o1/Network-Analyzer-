@@ -1,27 +1,6 @@
 #include "ipv4.h"
 
-uint16_t checksum_calc(const void *vdata, size_t length) {
-    const uint16_t *data = (const uint16_t *)vdata;
-    uint32_t sum = 0;
 
-    // adding every word
-    for (; length > 1; length -= 2) {
-        sum += *data++;
-    }
-
-    // if packet size is odd
-    if (length == 1) {
-        sum += *(const uint8_t *)data;
-    }
-
-    // adding bit 
-    while (sum >> 16) {
-        sum = (sum & 0xFFFF) + (sum >> 16);
-    }
-
-    // complement to 1
-    return ~sum;
-}
 
 
 // Debugging
@@ -88,7 +67,8 @@ void parse_IPv4(const u_char *packet){
            (calc_checksum == 0x0000) ? "valid" : "invalid");
     printf("Source Address: %s ", inet_ntoa(ip_header->ip_src)); // Source IP address
     printf("Destination Address: %s ", inet_ntoa(ip_header->ip_dst)); // Destination IP address
-    printf(")");
-    //parse_protocol(ip_header->ip_p, packet + (ip_header->ip_hl *4) + sizeof(struct ether_header));
+    printf(") ");
+
+    parse_protocol(ip_header->ip_p, packet + (ip_header->ip_hl *4) + sizeof(struct ether_header));
     
 }

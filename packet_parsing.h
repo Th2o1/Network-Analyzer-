@@ -21,6 +21,12 @@
 // Network layer
 #include "network_layer/ipv4.h"
 #include "network_layer/ipv6.h"
+#include "network_layer/icmp.h"
+#include "network_layer/icmpv6.h"
+
+// Transport
+#include "transport_layer/tcp.h"
+#include "transport_layer/udp.h"
 
 
 /**

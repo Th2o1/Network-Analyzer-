@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <netinet/tcp.h>
-#include "global_value.h"
+#include "../global_value.h"
 
 //Function Header 
 /**
@@ -48,4 +48,6 @@ void check_tcp_options(const u_char* tcp_options, unsigned int options_size);
  *                   This structure must be filled before calling this function.
  */
 void display_tcp_header(struct tcphdr* tcp_header);
+
+void parse_tcp(const u_char *packet);
 #endif // TCP_PARSE
