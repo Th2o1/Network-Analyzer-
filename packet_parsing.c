@@ -32,9 +32,10 @@ void parse_protocol(u_char protocol, const u_char *packet, size_t header_size){
             parse_udp(packet, header_size);
             break;
         case IPPROTO_ICMP: //IMCP
-            //parse_icmp(packet);
+            parse_icmp(packet, header_size);
             break;
         case IPPROTO_ICMPV6: //ICMPv6
-            //parse_icmpv6(packet);
-    }
+            parse_icmpv6(packet, header_size);
+            break;
+        }
 }
