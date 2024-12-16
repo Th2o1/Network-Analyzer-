@@ -3,6 +3,8 @@
 #include <stddef.h>
 #include <stdint.h> // For uint8_t
 #include <stdio.h>  // For printf
+#include <string.h>
+#include <netinet/ip.h> // IP Header 
 
 // Low verbosity : very concise
 #define LOW 1 

@@ -21,11 +21,6 @@ void parse_packet(const u_char *packet){
     printf("\n-----\n");
 }
 
-
-
-
-
-
 void parse_protocol(u_char protocol, const u_char *packet, size_t header_size){
     // we search wich protocol we have 
     printf("PROTOLCOL : %u " ,protocol);

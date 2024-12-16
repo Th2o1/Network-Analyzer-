@@ -25,6 +25,9 @@ uint16_t checksum_calc(const void *vdata, size_t length) {
     return ~sum;
 }
 
+
+
+
 // Debugging purpose 
 void print_packet(const unsigned char *packet, int length) {
     printf("Packet dump (length: %d bytes):\n", length);

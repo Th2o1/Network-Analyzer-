@@ -29,6 +29,7 @@ uint16_t validate_udp_checksum(const struct ip *ip_header, const struct udphdr *
     return checksum_calc(pseudo_header, pseudo_header_len);
 }
 
+
 void parse_udp(const u_char *packet, size_t header_size) {
     // Extract the UDP header from the packet
     struct udphdr *udp_header = (struct udphdr *)(packet + header_size);
@@ -43,7 +44,6 @@ void parse_udp(const u_char *packet, size_t header_size) {
     printf("UDP: ");
     printf("Source Port: %u, Destination Port: %u ", src_port, dst_port);
     printf("Length: %u ", udp_length);
-    printf("SIZE: %lu ", header_size);
 
     // Get the IP header for checksum calculation
     struct ip *ip_header = (struct ip *)packet;
@@ -54,6 +54,10 @@ void parse_udp(const u_char *packet, size_t header_size) {
     // Print checksum result
     printf("Checksum: 0x%04x (%s)\n", udp_checksum,
            (calculated_checksum == 0x0000) ? "valid" : "invalid");
+
+    if(src_port == 67 || src_port == 68){
+        //parse_bootp()
+    }
 
     return;
 }

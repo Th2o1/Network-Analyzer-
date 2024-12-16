@@ -1,34 +1,73 @@
 #include "tcp.h"
 
+uint16_t validate_tcp_checksum(const struct ip *ip_header, const struct tcphdr *tcp_header) {
+    // Calculate the length of the pseudo-header and the TCP data
+    size_t pseudo_header_len = 12 + (tcp_header->th_off * 4);
 
+    // Allocate memory for the pseudo-header
+    uint8_t pseudo_header[pseudo_header_len];
+
+    // Initialize the pseudo-header with zeros
+    memset(pseudo_header, 0, pseudo_header_len);
+
+    // Copy the source and destination addresses from the IP header
+    memcpy(pseudo_header, &ip_header->ip_src, sizeof(ip_header->ip_src));
+    memcpy(pseudo_header + 4, &ip_header->ip_dst, sizeof(ip_header->ip_dst));
+
+    // Fill the protocol field and the pseudo-header length
+    pseudo_header[8] = 0; // reserved
+    pseudo_header[9] = IPPROTO_TCP; // Protocol TCP
+    pseudo_header[10] = (pseudo_header_len >> 8) & 0xFF; // Pseudo-header length (high byte)
+    pseudo_header[11] = pseudo_header_len & 0xFF; // Pseudo-header length (low byte)
+
+    // Copy the TCP header and data into the pseudo-header
+    memcpy(pseudo_header + 12, tcp_header, (tcp_header->th_off * 4));
+
+    // Calculate and return the checksum
+    return checksum_calc(pseudo_header, pseudo_header_len);
+}
 
 // Use all the other function to parse a TCP packet
-void parse_tcp(const u_char *packet, size_t header_size){
-
+void parse_tcp(const u_char *packet, size_t header_size) {
+    // Extract the TCP header from the packet
     struct tcphdr *tcp_header = (struct tcphdr *)(packet + header_size);
-    //print_packet(packet, header_size+(tcp_header->th_off*4));
-    printf("TCP Source %u Destination %u ", 
-        ntohs(tcp_header->th_sport),ntohs(tcp_header->th_dport));
-    printf("Sequence %u Ack %u ", 
-        ntohl(tcp_header->th_seq), ntohl(tcp_header->th_ack));
-    printf("Data offset %u ", tcp_header->th_off);
-    printf("%u ", checksum_calc(tcp_header, header_size+(tcp_header->th_off*4)));
-    check_tcp_flags(tcp_header->th_flags);
-    // Print Window
-    printf("Window %u ", tcp_header->th_win);
 
-    // Print Checksum and its validity
-    printf("%u %d ", checksum_calc(packet, header_size + (tcp_header->th_off * 4)), header_size);
-    printf("Checksum %u (%s) ", tcp_header->th_sum, 
-           (checksum_calc(packet, header_size + (tcp_header->th_off * 4)) == 0x0000) ? "valid" : "invalid");
+    // Extract source port, destination port, sequence number, ack number, data offset, window size, urgent pointer from the header
+    uint16_t src_port = ntohs(tcp_header->th_sport);
+    uint16_t dst_port = ntohs(tcp_header->th_dport);
+    uint32_t sequence_number = ntohl(tcp_header->th_seq);
+    uint32_t ack_number = ntohl(tcp_header->th_ack);
+    uint16_t data_offset = tcp_header->th_off;
+    uint16_t window_size = tcp_header->th_win;
+    uint16_t urgent_pointer = tcp_header->th_urp;
+
+    // Print basic TCP information
+    printf("TCP Source %u Destination %u ", src_port, dst_port);
+    printf("Sequence %u Ack %u ", sequence_number, ack_number);
+    printf("Data offset %u ", data_offset);
+
+    // Call the checksum validation function
+    struct ip *ip_header = (struct ip *)packet;
+    uint16_t calculated_checksum = validate_tcp_checksum(ip_header, tcp_header);
+    printf("CLAC : 0x%04x", calculated_checksum);
+
+    // Print checksum result
+    printf("Checksum 0x%04x (%s) ", tcp_header->th_sum,
+           (calculated_checksum == 0x0000) ? "valid" : "invalid");
+
+    // Check TCP flags
+    check_tcp_flags(tcp_header->th_flags);
+
+    // Print Window Size
+    printf("Window %u ", window_size);
 
     // Print Urgent Pointer
-    printf("Urgent Pointer %u\n", tcp_header->th_urp);
-    if(tcp_header->th_off > 5){
-        // tcp packet is 20 octet after that its only option
+    printf("Urgent Pointer %u\n", urgent_pointer);
+
+    // Check TCP options
+    if (data_offset > 5) {
         const u_char* tcp_options = (const u_char*) tcp_header + 20;
-        // Size in octet of the option
-        unsigned int options_size = (tcp_header->th_off * 4) - 20;
+        unsigned int options_size = (data_offset * 4) - 20;
         check_tcp_options(tcp_options, options_size);
     }
     return;
