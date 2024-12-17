@@ -41,14 +41,29 @@ uint16_t checksum_calc(const void *vdata, size_t length) {
 // Debugging purpose 
 void print_packet(const unsigned char *packet, int length) {
     printf("Packet dump (length: %d bytes):\n", length);
+    int ligne_number = 0;
+    char ascii_line[17];
+    ascii_line[16] = '\0';
+    printf("%04x  ", ligne_number);
     for (int i = 0; i < length; i++) {
+        ligne_number++; 
         printf("%02x ", packet[i]);
+        // Convert byte to ASCII
+        ascii_line[i % 16] = (packet[i] >= 32 && packet[i] <= 126) ? packet[i] : '.';
         
         if ((i + 1) % 16 == 0) {
+            printf("\t");
+            for(int j = 0; j < 16 ; j++) printf("%c", ascii_line[j]); // Print ascii line
             printf("\n");
+            printf("%04x  ", ligne_number);
         }
     }
     if (length % 16 != 0) {
+        for(int i = 0 ; i<16 - length % 16; i++){ // PADDING
+            printf("   ");
+        }
+        printf("\t");
+        for(int j = 0 ; j<length % 16; j++) printf("%c", ascii_line[j]);
         printf("\n");
     }
     printf("---------------------");
