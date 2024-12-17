@@ -45,7 +45,7 @@ ipv4: $(EXEC)
 tcp: $(EXEC)
 	./$(EXEC) -o data/IPv4_TCP.pcapng
 smtp: $(EXEC)
-	./$(EXEC) -o data/smtp.pcpap
+	./$(EXEC) -o data/smtp.pcap
 
 icmp: $(EXEC)
 	./$(EXEC) -o data/icmp.pcapng
