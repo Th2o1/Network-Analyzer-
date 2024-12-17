@@ -1,6 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
-        "ethernet.h": "c"
+        "ethernet.h": "c",
+        "stdio.h": "c"
     }
 }

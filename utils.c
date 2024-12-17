@@ -1,6 +1,16 @@
 #include "global_value.h"
 
 
+void print_ether_address(const u_char* addr) {
+    for (int i = 0; i < ETHER_ADDR_LEN; i++) {
+        printf("%02x", addr[i]); // Display octet
+        if (i < ETHER_ADDR_LEN - 1) {
+            printf(":");
+        }
+    }
+    printf(" ");
+}
+
 // Calculation of the chacksums
 uint16_t checksum_calc(const void *vdata, size_t length) {
     const uint16_t *data = (const uint16_t *)vdata;

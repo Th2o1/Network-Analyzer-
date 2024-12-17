@@ -5,6 +5,9 @@
 #include <stdio.h>  // For printf
 #include <string.h>
 #include <netinet/ip.h> // IP Header 
+#include <arpa/inet.h>
+#include <netinet/if_ether.h>
+#include <net/ethernet.h>
 
 // Low verbosity : very concise
 #define LOW 1 
@@ -29,4 +32,4 @@ int verbosity;
  */
 uint16_t checksum_calc(const void *vdata, size_t length);
 void print_packet(const unsigned char *packet, int length);
-    
+void print_ether_address(const u_char* addr);    

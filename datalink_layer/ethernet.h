@@ -11,6 +11,8 @@
 #include <netinet/if_ether.h>
 #include <net/ethernet.h>
 
+#include "../global_value.h"
+
 /**
  * @brief Parse and display the source and destination Ethernet (MAC) addresses.
  *

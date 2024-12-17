@@ -56,7 +56,7 @@ void parse_udp(const u_char *packet, size_t header_size) {
            (calculated_checksum == 0x0000) ? "valid" : "invalid");
 
     if(src_port == 67 || src_port == 68){
-        //parse_bootp()
+        parse_bootp(packet, header_size + sizeof(struct udphdr));
     }
 
     return;

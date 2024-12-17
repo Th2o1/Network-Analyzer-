@@ -6,6 +6,7 @@
 #include <netinet/ip.h> // IP Header 
 #include <string.h>
 
+#include "../application_layer/bootp_dhcp.h"
 #include "../global_value.h"
 
 

@@ -10,7 +10,7 @@ extern int verbosity;
 
 void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u_char *packet){
     parse_packet(packet);
-    print_packet(packet, pkthdr->len); //Print raw packet (usefull for debuging)
+    //print_packet(packet, pkthdr->len); //Print raw packet (usefull for debuging)
 }
 
 int main(int argc, char *argv[]){
