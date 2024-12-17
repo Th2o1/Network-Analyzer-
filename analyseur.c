@@ -1,16 +1,23 @@
 #include "analyseur.h"
 
 extern int verbosity;
-
+// tcpdump -r data/smtp.pcap -n -vv
 // i ou bien o
 // f optio
 // v pas obliger pas defaut
-
+int packet_number = 0;
+// To know the packet number (debigging)
+void print_packet_number(){
+    packet_number++;
+    printf("-----%d\n", packet_number);
+}
 
 
 void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u_char *packet){
+    packet_size = pkthdr->len; // Total size of the packet put in global value
+    print_packet_number();
     parse_packet(packet);
-    //print_packet(packet, pkthdr->len); //Print raw packet (usefull for debuging)
+    print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
 }
 
 int main(int argc, char *argv[]){

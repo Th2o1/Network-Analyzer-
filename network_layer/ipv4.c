@@ -68,6 +68,6 @@ void parse_IPv4(const u_char *packet){
     printf("Destination Address: %s ", inet_ntoa(ip_header->ip_dst)); // Destination IP address
     printf(") ");
 
-    parse_protocol(ip_header->ip_p, ip_header,  (ip_header->ip_hl *4));
+    parse_protocol(ip_header->ip_p, packet,  (ip_header->ip_hl *4) + sizeof(struct ether_header));
     
 }

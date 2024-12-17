@@ -34,10 +34,10 @@ void print_icmpv6_message(const struct icmp6_hdr *icmpv6_header) {
 void parse_icmpv6(const u_char *packet, size_t header_size) {
     const struct icmp6_hdr *icmpv6_header = (const struct icmp6_hdr *)(packet + header_size);
 
-    printf("ICMPv6 Header:\n");
-    printf("Type: %u\n", icmpv6_header->icmp6_type);
-    printf("Code: %u\n", icmpv6_header->icmp6_code);
-    printf("Checksum: 0x%04x\n", ntohs(icmpv6_header->icmp6_cksum));
+    printf("ICMPv6 Header: ");
+    printf("Type: %u ", icmpv6_header->icmp6_type);
+    printf("Code: %u ", icmpv6_header->icmp6_code);
+    printf("Checksum: 0x%04x ", ntohs(icmpv6_header->icmp6_cksum));
 
     // Call the function to print the ICMPv6 message details
     print_icmpv6_message(icmpv6_header);

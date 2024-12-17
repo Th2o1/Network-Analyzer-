@@ -7,7 +7,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <netinet/tcp.h>
+#include "../application_layer/smtp.h"
 #include "../global_value.h"
+
 
 //Function Header 
 /**

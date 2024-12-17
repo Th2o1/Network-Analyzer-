@@ -49,7 +49,7 @@ void parse_tcp(const u_char *packet, size_t header_size) {
     // Call the checksum validation function
     struct ip *ip_header = (struct ip *)packet;
     uint16_t calculated_checksum = validate_tcp_checksum(ip_header, tcp_header);
-    printf("CLAC : 0x%04x", calculated_checksum);
+    printf("CLAC : 0x%04x ", calculated_checksum);
 
     // Print checksum result
     printf("Checksum 0x%04x (%s) ", tcp_header->th_sum,
@@ -62,7 +62,7 @@ void parse_tcp(const u_char *packet, size_t header_size) {
     printf("Window %u ", window_size);
 
     // Print Urgent Pointer
-    printf("Urgent Pointer %u\n", urgent_pointer);
+    printf("Urgent Pointer %u ", urgent_pointer);
 
     // Check TCP options
     if (data_offset > 5) {
@@ -70,6 +70,19 @@ void parse_tcp(const u_char *packet, size_t header_size) {
         unsigned int options_size = (data_offset * 4) - 20;
         check_tcp_options(tcp_options, options_size);
     }
+
+    // Calc the offset for the next layer
+    size_t tcp_header_size = data_offset * 4;
+    size_t offset =  header_size + tcp_header_size;
+
+    // Check for SMTP traffic based on port
+    if (src_port == 25 || dst_port == 25 || 
+        src_port == 587 || dst_port == 587 || 
+        src_port == 465 || dst_port == 465) {
+
+        parse_smtp(packet, offset);
+    }
+
     return;
 }
 
