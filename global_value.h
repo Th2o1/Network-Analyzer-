@@ -1,6 +1,8 @@
 // Define for verbosity 
 #include <stdint.h>
 #include <stddef.h>
+#include <pcap.h>
+#include <stdlib.h>
 #include <stdint.h> // For uint8_t
 #include <stdio.h>  // For printf
 #include <string.h>
@@ -34,4 +36,5 @@ size_t packet_size;
  */
 uint16_t checksum_calc(const void *vdata, size_t length);
 void print_packet(const unsigned char *packet, int length);
-void print_ether_address(const u_char* addr);    
+void print_ether_address(const u_char* addr); 
+void parse_ascii(const u_char *packet, size_t offset);   

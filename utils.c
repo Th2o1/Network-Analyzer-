@@ -68,3 +68,31 @@ void print_packet(const unsigned char *packet, int length) {
     }
     printf("---------------------");
 }
+
+
+void parse_ascii(const u_char *packet, size_t offset){
+
+    const u_char *payload = (packet+offset);
+    if (strlen((const char *)payload) < 4) { // Case -> end tcp transaction
+        printf("No data ");
+        return;
+    }
+    int length = packet_size - offset;
+    printf("Length: %d \n", length);
+    char *payload_data = (char *)malloc(length + 1);
+    if (!payload_data) {
+        fprintf(stderr, "Failed to allocate memory for payload.\n");
+        return;
+    }
+    memcpy(payload_data, payload, length);
+    payload_data[length] = '\0';
+
+    // Print the payload line by line
+    char *line = strtok(payload_data, "\r\n");
+    while (line != NULL) {
+        printf("  %s\n", line);
+        line = strtok(NULL, "\r\n");
+    }
+
+    free(payload_data);
+}

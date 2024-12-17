@@ -35,10 +35,10 @@ void parse_tcp(const u_char *packet, size_t header_size) {
     // Extract source port, destination port, sequence number, ack number, data offset, window size, urgent pointer from the header
     uint16_t src_port = ntohs(tcp_header->th_sport);
     uint16_t dst_port = ntohs(tcp_header->th_dport);
-    uint32_t sequence_number = ntohl(tcp_header->th_seq);
-    uint32_t ack_number = ntohl(tcp_header->th_ack);
+    uint8_t sequence_number = tcp_header->th_seq;
+    uint8_t ack_number = tcp_header->th_ack;
     uint16_t data_offset = tcp_header->th_off;
-    uint16_t window_size = tcp_header->th_win;
+    uint16_t window_size = ntohs(tcp_header->th_win);
     uint16_t urgent_pointer = tcp_header->th_urp;
 
     // Print basic TCP information
@@ -79,8 +79,17 @@ void parse_tcp(const u_char *packet, size_t header_size) {
     if (src_port == 25 || dst_port == 25 || 
         src_port == 587 || dst_port == 587 || 
         src_port == 465 || dst_port == 465) {
-
-        parse_smtp(packet, offset);
+        printf("SMTP: ");
+        parse_ascii(packet, offset);
+    }
+    // Check for HTTP traffic based on port 
+    if (src_port == 80 || dst_port == 80 || src_port == 8080 || dst_port == 8080 ||
+        src_port == 443 || dst_port == 443 ){
+        printf("HTTP: ",packet_size-offset);
+    }
+    if (src_port == 21 || dst_port == 21){
+        printf("FTP: ");
+        parse_ascii(packet, offset);
     }
 
     return;

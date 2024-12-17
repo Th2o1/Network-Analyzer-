@@ -46,6 +46,10 @@ tcp: $(EXEC)
 	./$(EXEC) -o data/IPv4_TCP.pcapng
 smtp: $(EXEC)
 	./$(EXEC) -o data/smtp.pcap
+http: $(EXEC)
+	./$(EXEC) -o data/http.pcap
+ftp: $(EXEC)
+	./$(EXEC) -o data/ftp.pcap
 
 icmp: $(EXEC)
 	./$(EXEC) -o data/icmp.pcapng
