@@ -1,8 +1,4 @@
 #include "smtp.h"
-
-
-
-
 void parse_smtp(const u_char *packet, size_t offset){
 
     const u_char *payload = (packet+offset);
