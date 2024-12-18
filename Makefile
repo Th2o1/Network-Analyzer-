@@ -51,6 +51,9 @@ smtp: $(EXEC)
 http: $(EXEC)
 	./$(EXEC) -o data/http.pcap
 
+telnet: $(EXEC)
+	./$(EXEC) -o data/telnet-cooked.pcap
+
 ftp: $(EXEC)
 	./$(EXEC) -o data/ftp.pcap
 

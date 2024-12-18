@@ -100,9 +100,15 @@ void parse_tcp(const u_char *packet, size_t header_size) {
         printf("IMAP ");
         application_layer = 1;
     }
+    // Check for POP based on port
     if (src_port == 110 || dst_port == 110){
         printf("POP ");
         application_layer = 1;
+    }
+    // Check for telnet based on port
+    if (src_port == 23 || dst_port == 23){
+        printf("Telnet ");
+        if (packet_size-offset != 0)parse_telnet(packet, offset);
     }
     if (packet_size-offset != 0 && application_layer) parse_ascii(packet, offset);
     return;

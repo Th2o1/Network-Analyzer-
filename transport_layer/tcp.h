@@ -7,7 +7,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <netinet/tcp.h>
+
 #include "../global_value.h"
+#include "../application_layer/telnet.h"
 
 
 //Function Header 
