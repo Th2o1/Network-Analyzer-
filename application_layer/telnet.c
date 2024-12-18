@@ -76,7 +76,6 @@ void parse_telnet(const u_char* packet, size_t offset){
         parse_ascii(packet, offset);
         return;
     }
-
     size_t telnet_length = packet_size - offset; // Length of the telnet packet
     size_t current_position = 0;
     printf("\n");
@@ -102,8 +101,6 @@ void parse_telnet(const u_char* packet, size_t offset){
             process_telnet_option(option);
             printf("\n");
             current_position += 3; // move cursor : 0xff cmd option
-
-         
         } else {
             // Ignore data
             current_position++;

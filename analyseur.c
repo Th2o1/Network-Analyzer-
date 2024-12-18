@@ -9,6 +9,8 @@ extern int verbosity;
 
 // Capture session
 pcap_t* capture_session;
+// Filter
+struct bpf_program fp;
 // Current packet number 
 int packet_number = 0;
 // To know the packet number (debigging)
@@ -18,9 +20,10 @@ void print_packet_number(){
 }
 
 void handle_sigint(int sig) {
-    printf("\nCleaning up before exiting...\n", sig);
+    printf("\nCleaning up before exiting...\n\n", sig);
     
     pcap_close(capture_session);
+    pcap_freecode(&fp);
     printf("Packet %d\n", packet_number);
     exit(0); // Exit the program
 }
@@ -34,9 +37,12 @@ void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u
 }
 
 int main(int argc, char *argv[]){
+
     char errbuf[PCAP_ERRBUF_SIZE];
     char *interface, *file = NULL;
+    const char* bpf_filter;
     verbosity = 1;
+
     int opt;
     while ((opt = getopt(argc, argv, "i:o:f:v:")) != -1) {
     //Gestion des options de la commande 
@@ -52,6 +58,7 @@ int main(int argc, char *argv[]){
                 file = optarg;
                 break;
             case 'f':
+                bpf_filter = optarg;
                 break;
             case 'v':
                 verbosity = atoi(optarg);
@@ -93,10 +100,27 @@ int main(int argc, char *argv[]){
             return 1;
         }
     }
-    //mettre à 0 à la place de 10 pour capture 'infini'
+
+    // Apply filter if needed
+    if (bpf_filter != NULL) {
+        if (pcap_compile(capture_session, &fp, bpf_filter, 0, PCAP_NETMASK_UNKNOWN) == -1) {
+            fprintf(stderr, "Error compiling BPF filter: %s\n", pcap_geterr(capture_session));
+            pcap_close(capture_session);
+            return 1;
+        }
+        if (pcap_setfilter(capture_session, &fp) == -1) {
+            fprintf(stderr, "Error setting BPF filter: %s\n", pcap_geterr(capture_session));
+            pcap_freecode(&fp);
+            pcap_close(capture_session);
+            return 1;
+        }
+        pcap_freecode(&fp); // Libérer la mémoire allouée pour le filtre compilé
+    }
+
+    // Start the loop 
     if(pcap_loop(capture_session, 0, packet_handler, (u_char *)&verbosity) < 0){
         fprintf(stderr, "Error while calling loop \n");
+        pcap_close(capture_session);
     }
-    pcap_close(capture_session);
     return 0;
 }
