@@ -7,6 +7,16 @@
 #include <netinet/if_ether.h>
 #include "ethernet.h"
 
+#ifdef __linux__
+#define ARPHRD_FRELAY ARPHRD_DLCI
+#define ARPHRD_IEEE1394_EUI64 ARPHRD_IEEE1394
+#define ARPOP_REVREQUEST                                                       \
+  ARPOP_RREQUEST /* request protocol address given hardware */
+#define ARPOP_REVREPLY ARPOP_RREPLY      /* response giving protocol address */
+#define ARPOP_INVREQUEST ARPOP_InREQUEST /* request to identify peer */
+#define ARPOP_INVREPLY ARPOP_InREPLY     /* response identifying peer */
+#endif
+
 /**
  * @brief Parse and display the operation type of an ARP packet.
  *

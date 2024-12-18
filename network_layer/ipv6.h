@@ -13,6 +13,10 @@
 #include <netinet/ip6.h> // IPv6 Header
 #include <netinet/ip.h> // IP Header 
 
+#ifdef __linux__
+#define IPV6_FLOWLABEL_MASK 0xffff0f00
+#endif
+
 // FUNCTION HEADER
 
 /**

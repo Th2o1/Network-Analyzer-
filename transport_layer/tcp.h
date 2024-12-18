@@ -11,6 +11,10 @@
 #include "../global_value.h"
 #include "../application_layer/telnet.h"
 
+#ifdef __linux__
+#define TH_ECE 0x40
+#define TH_CWR 0x80
+#endif
 
 //Function Header 
 /**

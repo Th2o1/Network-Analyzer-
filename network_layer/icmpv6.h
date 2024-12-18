@@ -9,6 +9,10 @@
 #include <netinet/ip.h> // IP Header 
 #include "../global_value.h"
 
+#ifdef __linux__
+#define ND_RA_FLAG_HA ND_RA_FLAG_HOME_AGENT
+#endif
+
 //PARSING
 void parse_icmpv6(const u_char *packet, size_t header_size);
 
