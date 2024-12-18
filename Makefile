@@ -10,7 +10,7 @@ OBJ = $(SRC:.c=.o)
 
 # Compilation options
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -D_BSD_SOURCE
+CFLAGS = -Wall -Wextra -std=c11 -Wcpp
 LDFLAGS = -lpcap  # Linking with the pcap library
 
 # Default rule
