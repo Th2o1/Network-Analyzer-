@@ -54,6 +54,12 @@ http: $(EXEC)
 ftp: $(EXEC)
 	./$(EXEC) -o data/ftp.pcap
 
+imap: $(EXEC)
+	./$(EXEC) -o data/imap.cap
+
+pop: $(EXEC)
+	./$(EXEC) -o data/pop-ssl.pcapng
+
 icmp: $(EXEC)
 	./$(EXEC) -o data/icmp.pcapng
 

@@ -75,30 +75,36 @@ void parse_tcp(const u_char *packet, size_t header_size) {
     size_t tcp_header_size = data_offset * 4;
     size_t offset =  header_size + tcp_header_size;
 
+    int application_layer = 0;
     // Check for SMTP traffic based on port
     if (src_port == 25 || dst_port == 25 || 
         src_port == 587 || dst_port == 587 || 
         src_port == 465 || dst_port == 465) {
         printf("SMTP ");
-        if (packet_size-offset != 0) parse_ascii(packet, offset);
+        application_layer = 1;
+        
     }
     // Check for HTTP traffic based on port 
     if (src_port == 80 || dst_port == 80 || src_port == 8080 || dst_port == 8080 ||
         src_port == 443 || dst_port == 443 ){
-        printf("HTTP");
-        if (packet_size-offset != 0) printf(": Length: %zu",packet_size-offset);
+        printf("HTTP ");
+        application_layer = 1;
     }
     // Check for FTP based on port 
     if (src_port == 21 || dst_port == 21){
         printf("FTP: ");
-        if (packet_size-offset != 0) parse_ascii(packet, offset);
+        application_layer = 1;
     }
     // Check for IMAP based on port 
     if (src_port == 143 || dst_port == 143){
         printf("IMAP ");
-        if (packet_size-offset != 0)parse_ascii(packet, offset);
+        application_layer = 1;
     }
-
+    if (src_port == 110 || dst_port == 110){
+        printf("POP ");
+        application_layer = 1;
+    }
+    if (packet_size-offset != 0 && application_layer) parse_ascii(packet, offset);
     return;
 }
 

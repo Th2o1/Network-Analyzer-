@@ -49,7 +49,7 @@ void print_packet(const unsigned char *packet, int length) {
         ligne_number++; 
         printf("%02x ", packet[i]);
         // Convert byte to ASCII
-        ascii_line[i % 16] = (packet[i] >= 32 && packet[i] <= 126) ? packet[i] : '.';
+        ascii_line[i % 16] = (packet[i] >= 32 || packet[i] <= 126) ? packet[i] : '.';
         
         if ((i + 1) % 16 == 0) {
             printf("\t");
@@ -86,6 +86,11 @@ void parse_ascii(const u_char *packet, size_t offset){
     memcpy(payload_data, payload, length);
     payload_data[length] = '\0';
 
+    //if (!(c >= 32 || c <= 126)) return // Character is NOT in ASCII
+    for (int i = 0; i < length; i++) {
+    char c = payload_data[i];
+    if ( !((c >= 32 && c <= 126) || c == 10 || c == 13 )) return;// Character is NOT in ASCII (or a space)
+    }   
     // Print the payload line by line
     char *line = strtok(payload_data, "\r\n");
     while (line != NULL) {
