@@ -23,7 +23,6 @@ void parse_packet(const u_char *packet){
 
 void parse_protocol(u_char protocol, const u_char *packet, size_t header_size){
     // we search wich protocol we have 
-    printf("PROTOLCOL : %u " ,protocol);
     switch (protocol) {
         case IPPROTO_TCP :// TCP
             parse_tcp(packet, header_size);

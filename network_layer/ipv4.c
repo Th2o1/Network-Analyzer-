@@ -65,7 +65,7 @@ void parse_IPv4(const u_char *packet){
            ntohs(ip_header->ip_sum),
            (calc_checksum == 0x0000) ? "valid" : "invalid");
     printf("Source Address: %s ", inet_ntoa(ip_header->ip_src)); // Source IP address
-    printf("Destination Address: %s ", inet_ntoa(ip_header->ip_dst)); // Destination IP address
+    printf("Destination Address: %s", inet_ntoa(ip_header->ip_dst)); // Destination IP address
     printf(") ");
 
     parse_protocol(ip_header->ip_p, packet,  (ip_header->ip_hl *4) + sizeof(struct ether_header));

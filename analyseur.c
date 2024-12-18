@@ -5,11 +5,24 @@ extern int verbosity;
 // i ou bien o
 // f optio
 // v pas obliger pas defaut
+
+
+// Capture session
+pcap_t* capture_session;
+// Current packet number 
 int packet_number = 0;
 // To know the packet number (debigging)
 void print_packet_number(){
     packet_number++;
-    printf("-----%d\n", packet_number);
+    printf("Packet captured : %d\n", packet_number);
+}
+
+void handle_sigint(int sig) {
+    printf("\nCleaning up before exiting...\n", sig);
+    
+    pcap_close(capture_session);
+    printf("Packet %d\n", packet_number);
+    exit(0); // Exit the program
 }
 
 
@@ -54,7 +67,8 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    pcap_t* capture_session;
+    
+    signal(SIGINT, handle_sigint);
     if(interface != NULL){
         capture_session = pcap_open_live(interface, BUFSIZ, 1, 1000, errbuf); 
         if (capture_session == NULL){

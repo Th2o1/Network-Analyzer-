@@ -6,6 +6,7 @@
 #include <pcap.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h> // to catch signal
 #include <netinet/in.h>
 #include <netinet/ip.h> // IP header 
 #include <net/ethernet.h> // Detection IPv4 / IPv6 

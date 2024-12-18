@@ -74,7 +74,6 @@ void parse_ascii(const u_char *packet, size_t offset){
 
     const u_char *payload = (packet+offset);
     if (strlen((const char *)payload) < 4) { // Case -> end transaction
-        printf("No data ");
         return;
     }
     int length = packet_size - offset;
