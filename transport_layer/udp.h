@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "../application_layer/bootp_dhcp.h"
+#include "../application_layer/dns.h"
 #include "../global_value.h"
 
 

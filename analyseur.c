@@ -17,7 +17,7 @@ void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u
     packet_size = pkthdr->len; // Total size of the packet put in global value
     print_packet_number();
     parse_packet(packet);
-    print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
+    //print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
 }
 
 int main(int argc, char *argv[]){
@@ -51,6 +51,7 @@ int main(int argc, char *argv[]){
     if((interface == NULL && file == NULL) || (interface != NULL && file != NULL) ){
         fprintf(stderr, "You need at least an interface or a file, but not both\n");
         fprintf(stderr, "Usage: %s [-i interface] [-o file]\n", argv[0]);
+        return 1;
     }
 
     pcap_t* capture_session;
@@ -72,7 +73,6 @@ int main(int argc, char *argv[]){
         }
     }
     else{
-        printf("Reading from file: %s\n", file);
         capture_session = pcap_open_offline(file, errbuf);
         if(capture_session == NULL){
             fprintf(stderr, "Error: %s with file %s \n", file, errbuf);

@@ -1,6 +1,5 @@
 #include "udp.h"
 
-
 //Function to validate UDP checksum
 uint16_t validate_udp_checksum(const struct ip *ip_header, const struct udphdr *udp_header, size_t udp_length) {
     // Compute the length of the pseudo-header and UDP data
@@ -55,9 +54,17 @@ void parse_udp(const u_char *packet, size_t header_size) {
     printf("Checksum: 0x%04x (%s)\n", udp_checksum,
            (calculated_checksum == 0x0000) ? "valid" : "invalid");
 
-    if(src_port == 67 || src_port == 68){
+    // We detect bootp with the port
+    if (src_port == 67 || src_port == 68){
         parse_bootp(packet, header_size + sizeof(struct udphdr));
     }
+
+    // We detect DNS with port 
+    if (src_port == 53 || dst_port == 53){
+        parse_dns(packet, header_size + sizeof(struct udphdr));
+
+    }
+    
 
     return;
 }

@@ -44,10 +44,13 @@ ipv4: $(EXEC)
 
 tcp: $(EXEC)
 	./$(EXEC) -o data/IPv4_TCP.pcapng
+
 smtp: $(EXEC)
 	./$(EXEC) -o data/smtp.pcap
+
 http: $(EXEC)
 	./$(EXEC) -o data/http.pcap
+
 ftp: $(EXEC)
 	./$(EXEC) -o data/ftp.pcap
 
@@ -56,8 +59,12 @@ icmp: $(EXEC)
 
 ipv6: $(EXEC)
 	./$(EXEC) -o data/v6.pcap
+
 udp: $(EXEC)
 	./$(EXEC) -o data/dhcp.pcap
+
+dns: $(EXEC)
+	./$(EXEC) -o data/dns.pcapng
 
 
 # Display help information
