@@ -10,7 +10,7 @@ OBJ = $(SRC:.c=.o)
 
 # Compilation options
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11
+CFLAGS = -Wall -Wextra -std=c11 -D_BSD_SOURCE
 LDFLAGS = -lpcap  # Linking with the pcap library
 
 # Default rule
@@ -22,7 +22,7 @@ $(EXEC): $(OBJ)
 
 # Build object files
 %.o: %.c %.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean up generated files
 clean:
