@@ -22,7 +22,7 @@ $(EXEC): $(OBJ)
 
 # Build object files
 %.o: %.c %.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@
 
 # Clean up generated files
 clean:

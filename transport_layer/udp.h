@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <netinet/udp.h>
 #include <netinet/ip.h> // IP Header 
+#include <arpa/inet.h>
+#include <netinet/if_ether.h>
+#include <net/ethernet.h>
+
 #include <string.h>
 
 #include "../application_layer/bootp_dhcp.h"

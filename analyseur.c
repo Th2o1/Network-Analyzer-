@@ -20,7 +20,8 @@ void print_packet_number(){
 }
 
 void handle_sigint(int sig) {
-    printf("\nCleaning up before exiting...\n\n", sig);
+    (void)(sig);
+    printf("\nCleaning up before exiting...\n\n");
     
     pcap_close(capture_session);
     pcap_freecode(&fp);
@@ -29,7 +30,8 @@ void handle_sigint(int sig) {
 }
 
 
-void packet_handler(u_char *verbosity, const struct pcap_pkthdr *pkthdr, const u_char *packet){
+void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_char *packet){
+    (void)(verbos); // unused error 
     packet_size = pkthdr->len; // Total size of the packet put in global value
     print_packet_number();
     parse_packet(packet);

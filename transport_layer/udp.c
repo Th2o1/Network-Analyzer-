@@ -3,7 +3,7 @@
 //Function to validate UDP checksum
 uint16_t validate_udp_checksum(const struct ip *ip_header, const struct udphdr *udp_header, size_t udp_length) {
     // Compute the length of the pseudo-header and UDP data
-    uint16_t pseudo_header_len = 26 + udp_length;
+    uint16_t pseudo_header_len = 12 + udp_length;
 
     // Allocate memory for the pseudo-header
     uint8_t pseudo_header[pseudo_header_len];
@@ -45,7 +45,7 @@ void parse_udp(const u_char *packet, size_t header_size) {
     printf("Length: %u ", udp_length);
 
     // Get the IP header for checksum calculation
-    struct ip *ip_header = (struct ip *)packet;
+    struct ip *ip_header = (struct ip *)(packet+sizeof(struct ether_header));
 
     // Call the checksum validation function
     uint16_t calculated_checksum = validate_udp_checksum(ip_header, udp_header, udp_length);
