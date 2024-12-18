@@ -11,6 +11,7 @@
 #include <netinet/if_ether.h>
 #include <net/ethernet.h>
 
+#define __USE_MISC_
 // Low verbosity : very concise
 #define LOW 1 
 // Medium verbosity : synthetic
