@@ -22,14 +22,14 @@ jobs:
       run: make
 
     - name: Run dns with Valgrind 
-      run: valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./analyseur -o data/dns.pcap -v 3
+      run: valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./analyseur -o data/dns.pcapng -v 3
 
     - name: Run smtp with Valgrind 
       run: valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./analyseur -o data/smtp.pcap -v 3
 
     - name: Run dhcp with Valgrind 
       run: valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./analyseur -o data/dhcp.pcap -v 3
-      
+
     - name: Run tests
       run : make dns
 
