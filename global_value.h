@@ -4,14 +4,15 @@
 #include <pcap.h>
 #include <stdlib.h>
 #include <stdint.h> // For uint8_t
+#include <sys/types.h>
 #include <stdio.h>  // For printf
 #include <string.h>
 #include <netinet/ip.h> // IP Header 
 #include <arpa/inet.h>
+
 #include <netinet/if_ether.h>
 #include <net/ethernet.h>
 
-#define __USE_MISC_
 // Low verbosity : very concise
 #define LOW 1 
 // Medium verbosity : synthetic
