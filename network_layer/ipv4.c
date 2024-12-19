@@ -26,6 +26,7 @@ void print_ipv4_options(const u_char *options, size_t size) {
         switch (opt_type) {
             case OPT_COS:
                 printf("[CS] ");
+                break;
             case OPT_RR:
                 printf("[RR] ");
                 for (size_t j = 2; j < opt_len; j += 4) {
