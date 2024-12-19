@@ -81,9 +81,6 @@ void print_hardware_format(u_short ar_hrd) {
         case ARPHRD_IEEE1394: // IEEE 1394 (FireWire)
             printf("IEEE 1394 (FireWire) ");
             break;
-        case ARPHRD_IEEE1394_EUI64: // IEEE 1394 EUI-64
-            printf("IEEE 1394 EUI-64 ");
-            break;
         default:
             printf("Unknown or custom hardware format ");
             break;
