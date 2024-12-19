@@ -13,17 +13,23 @@ void parse_IPv6(const u_char *packet){
     inet_ntop(AF_INET6, &ipv6_header->ip6_dst, dst_addr, sizeof(dst_addr));
 
     // Printing in packet order
-    printf("Priority %u ", ipv6_header->ip6_vfc);
-    printf("Next Header %u ",ipv6_header->ip6_nxt);
-    printf("Flow Label %u ", ipv6_header->ip6_flow);
-    printf("Payload length %u ",ipv6_header->ip6_plen);
-    printf("Hops Limits %u ",ipv6_header->ip6_hlim);
-    
+    if(verbosity >= MEDIUM){
+        printf("Priority %u, ", ipv6_header->ip6_vfc);
+        printf("Next Header ");
+        display_protocol(ipv6_header->ip6_nxt);
+        printf("Flow Label %u, ", ipv6_header->ip6_flow);
+        printf("Payload length %u, ",ipv6_header->ip6_plen);
+        printf("HLimits %u, ",ipv6_header->ip6_hlim);
+    }
+
     printf("%s > ", src_addr);
-    printf("%s ", dst_addr);
+    printf("%s", dst_addr);
 
     printf(") ");
+    if(verbosity == HIGH){
+        printf("\n");
+    }
 
-    parse_protocol(ipv6_header->ip6_nxt, packet, 40+sizeof(struct ether_header));
+    //parse_protocol(ipv6_header->ip6_nxt, packet, 40+sizeof(struct ether_header));
 
 }

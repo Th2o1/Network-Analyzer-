@@ -33,6 +33,9 @@ clean:
 start: $(EXEC)
 	./$(EXEC) -i en0 -v $(VERBOSITY)
 
+# Rebuild for debugging
+rebuild : clean all
+
 # Run specific tests with predefined pcap files
 arp: $(EXEC)
 	./$(EXEC) -o data/arp-storm.pcap -v $(VERBOSITY)

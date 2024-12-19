@@ -35,6 +35,27 @@ uint16_t checksum_calc(const void *vdata, size_t length) {
     return ~sum;
 }
 
+void display_protocol(uint8_t protocol){
+    switch (protocol)
+        {
+        case IPPROTO_TCP: //TCP
+            printf("TCP (6) ");
+            break;
+        
+        case IPPROTO_UDP: // UDP
+            printf("UDP (17) ");
+            break;
+        case IPPROTO_ICMP: //IMCP
+            printf("ICMP (1) ");
+            break;
+        case IPPROTO_ICMPV6: //ICMPv6
+            printf("ICMPv6 (58) ");
+            break;
+        default:
+            printf("%u ", protocol);
+            break;
+        }
+}
 
 
 

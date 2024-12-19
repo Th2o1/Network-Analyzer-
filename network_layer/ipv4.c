@@ -120,18 +120,19 @@ void parse_IPv4(const u_char *packet){
     }
     else{
         //print_raw_ip_header((unsigned char*)ip_header, ip_header->ip_hl * 4);
-        char* protocol = ip_header->ip_p == 6 ? "TCP" : "UDP"; //TCP has value 6 and UDP has value 17
-        printf("TTL: %d, Protocol: %s (%d) ", ip_header->ip_ttl, protocol, ip_header->ip_p); 
-        printf("Version: %d ", ip_header->ip_v);             // IP version
-        printf("Header Length: %d bytes ", ip_header->ip_hl * 4); // Header length in bytes
-        printf("Type of Service: %d ", ip_header->ip_tos);   // Type of service
-        printf("Total Length: %d ", ntohs(ip_header->ip_len)); // Total length of the packet
-        printf("Identification: %d ", ntohs(ip_header->ip_id)); // Identification
+         //TCP has value 6 and UDP has value 17
+        printf("TTL: %d, Protocol: ", ip_header->ip_ttl); 
+        display_protocol(ip_header->ip_p);
+        printf("Version: %d, ", ip_header->ip_v);             // IP version
+        printf("Header Length: %d bytes, ", ip_header->ip_hl * 4); // Header length in bytes
+        printf("Type of Service: %d, ", ip_header->ip_tos);   // Type of service
+        printf("Total Length: %d, ", ntohs(ip_header->ip_len)); // Total length of the packet
+        printf("Identification: %d, ", ntohs(ip_header->ip_id)); // Identification
         check_ipv4_flags(ip_header);                          // Flag
-        printf("TTL: %d ", ip_header->ip_ttl);                // Time to live
+        printf("TTL: %d, ", ip_header->ip_ttl);                // Time to live
         // Checksum
         uint16_t calc_checksum = checksum_calc(ip_header, ip_header->ip_hl * 4);
-        printf("Checksum: 0x%04x (%s) ",
+        printf("Checksum: 0x%04x (%s), ",
                ntohs(ip_header->ip_sum),
                (calc_checksum == 0x0000) ? "valid" : "invalid");
         printf("%s > ", inet_ntoa(ip_header->ip_src)); // Source IP address
