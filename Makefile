@@ -19,7 +19,7 @@ all: $(EXEC)
 
 # Build the executable
 $(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ) $(LDFLAGS) -v $(VERBOSITY)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ) $(LDFLAGS) 
 
 # Build object files
 %.o: %.c %.h
