@@ -42,6 +42,9 @@ arp2: $(EXEC)
 ipv4: $(EXEC)
 	./$(EXEC) -o data/ipv4.pcap
 
+ipopt: $(EXEC)
+	./$(EXEC) -o data/ipv4_cipso_option.pcap
+
 tcp: $(EXEC)
 	./$(EXEC) -o data/IPv4_TCP.pcapng
 

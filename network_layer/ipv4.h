@@ -11,6 +11,14 @@
 //IP
 #include <netinet/ip.h> // IP Header 
 
+#define OPT_EOL   0  // End of Options List
+#define OPT_NOP   1  // No Operation
+#define OPT_RR    7  // Record Route
+#define OPT_TS    68 // Time Stamp
+#define OPT_LSR   131 // Loose Source Route
+#define OPT_COS   134 // Commercial Security
+#define OPT_SSR   137 // Strict Source Route
+
 // FUNCTION DEFINITION
 
 /**

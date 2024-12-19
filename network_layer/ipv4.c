@@ -1,18 +1,82 @@
 #include "ipv4.h"
 
 
+void print_ipv4_options(const u_char *options, size_t size) {
+    printf("Options: ");
+    size_t i = 0;
+    while (i < size) {
+        uint8_t opt_type = options[i];
+        if (opt_type == OPT_EOL) {
+            printf("[EOL] ");
+            break;
+        } else if (opt_type == OPT_NOP) {
+            printf("[NOP] ");
+            i++;
+            continue;
+        }
+        if (i + 1 >= size) {
+            printf("Malformed Option (type: %d) ", opt_type);
+            break;
+        }
+        uint8_t opt_len = options[i + 1];
+        if (opt_len < 2 || i + opt_len > size) {
+            printf("Malformed Option (type: %d, length: %d) ", opt_type, opt_len);
+            break;
+        }
+        switch (opt_type) {
+            case OPT_COS:
+                printf("[CS] ");
+            case OPT_RR:
+                printf("[RR] ");
+                for (size_t j = 2; j < opt_len; j += 4) {
+                    struct in_addr addr;
+                    memcpy(&addr, &options[i + j], 4);
+                    printf("Route: %s ", inet_ntoa(addr));
+                }
+                break;
+            case OPT_TS:
+                printf("[TS] ");
+                for (size_t j = 2; j < opt_len; j += 4) {
+                    uint32_t ts;
+                    memcpy(&ts, &options[i + j], 4);
+                    printf("Time: %u ms ", ntohl(ts));
+                }
+                break;
+            case OPT_LSR:
+                printf("[LSR] ");
+                for (size_t j = 2; j < opt_len; j += 4) {
+                    struct in_addr addr;
+                    memcpy(&addr, &options[i + j], 4);
+                    printf("Route: %s ", inet_ntoa(addr));
+                }
+                break;
+            case OPT_SSR:
+                printf("[SSR] ");
+                for (size_t j = 2; j < opt_len; j += 4) {
+                    struct in_addr addr;
+                    memcpy(&addr, &options[i + j], 4);
+                    printf("Route: %s ", inet_ntoa(addr));
+                }
+                break;
+            default:
+                printf("[Unknown] Type: %d ", opt_type);
+                break;
+        }
+        i += opt_len;
+    }
+}
 
 
 // Debugging
 void print_raw_ip_header(const unsigned char *packet, size_t size) {
-    printf("Raw IP Header:\n");
+    printf("Raw IP Header: ");
     for (size_t i = 0; i < size; i++) {
         printf("%02x ", packet[i]);
         if ((i + 1) % 16 == 0) { 
-            printf("\n");
+            printf(" ");
         }
     }
-    printf("\n");
+    printf(" ");
 }
 
 void check_ipv4_flags(const struct ip *ip_header) {
@@ -41,7 +105,7 @@ void check_ipv4_flags(const struct ip *ip_header) {
     printf("] ");
     if (verbosity == HIGH){
         uint16_t fragment_offset = flags_and_offset & 0x1FFF; // Bits 3 à 15
-        printf("Fragment Offset: %d (bytes: %d)\n", fragment_offset, fragment_offset * 8);
+        printf("Fragment Offset: %d (bytes: %d) ", fragment_offset, fragment_offset * 8);
     }
 }
 
@@ -67,6 +131,10 @@ void parse_IPv4(const u_char *packet){
     printf("Source Address: %s ", inet_ntoa(ip_header->ip_src)); // Source IP address
     printf("Destination Address: %s", inet_ntoa(ip_header->ip_dst)); // Destination IP address
     printf(") ");
+
+    if(ip_header->ip_hl * 4 > 20){ // If Size > 20 we have option
+        print_ipv4_options((const u_char *)(packet + 20 + sizeof(struct ether_header)), packet_size - 20 - sizeof(struct ether_header));
+    }
 
     parse_protocol(ip_header->ip_p, packet,  (ip_header->ip_hl *4) + sizeof(struct ether_header));
     
