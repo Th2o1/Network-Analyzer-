@@ -41,8 +41,12 @@ void parse_udp(const u_char *packet, size_t header_size) {
 
     // Print basic UDP information
     printf("UDP: ");
-    printf("Source Port: %u, Destination Port: %u ", src_port, dst_port);
-    printf("Length: %u ", udp_length);
+    printf("%u > %u, ", src_port, dst_port);
+    if ((verbosity >= MEDIUM))
+    {
+        printf("Length: %u, ", udp_length);
+    }
+    
 
     // Get the IP header for checksum calculation
     struct ip *ip_header = (struct ip *)(packet+sizeof(struct ether_header));
@@ -51,8 +55,11 @@ void parse_udp(const u_char *packet, size_t header_size) {
     uint16_t calculated_checksum = validate_udp_checksum(ip_header, udp_header, udp_length);
 
     // Print checksum result
-    printf("Checksum: 0x%04x (%s)\n", udp_checksum,
+    printf("Checksum: 0x%04x (%s) ", udp_checksum,
            (calculated_checksum == 0x0000) ? "valid" : "invalid");
+    if(verbosity == HIGH){
+        printf("\n");
+    }
 
     // We detect bootp with the port
     if (src_port == 67 || src_port == 68){
@@ -62,8 +69,8 @@ void parse_udp(const u_char *packet, size_t header_size) {
     // We detect DNS with port 
     if (src_port == 53 || dst_port == 53){
         parse_dns(packet, header_size + sizeof(struct udphdr));
-
     }
+
     
 
     return;
