@@ -78,7 +78,7 @@ void parse_ascii(const u_char *packet, size_t offset){
     }
     int length = packet_size - offset;
     printf("Length: %d \n", length);
-    char *payload_data = (char *)malloc(length + 1);
+    char *payload_data = (char *)malloc((length + 1)*sizeof(char));
     if (!payload_data) {
         fprintf(stderr, "Failed to allocate memory for payload.\n");
         return;

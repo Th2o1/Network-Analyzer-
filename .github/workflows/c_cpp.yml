@@ -23,7 +23,7 @@ jobs:
 
     - name: Run tests with Valgrind
       run: |
-        valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 make smtp
+        valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./analyseur -o data/smtp.pcap
     
     - name: Run tests
       run : make dns
