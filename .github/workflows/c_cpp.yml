@@ -19,6 +19,8 @@ jobs:
     - name: Compile project
       run: make
     - name: Run tests 
-      run: make smtp  
+      run: |
+        make
+        valgrind make smtp  
     - name: Clean build
       run: make clean
