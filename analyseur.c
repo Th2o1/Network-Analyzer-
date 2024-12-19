@@ -123,6 +123,9 @@ int main(int argc, char *argv[]){
     if(pcap_loop(capture_session, 0, packet_handler, (u_char *)&verbosity) < 0){
         fprintf(stderr, "Error while calling loop \n");
         pcap_close(capture_session);
+        pcap_freecode(&fp);
     }
+    pcap_close(capture_session);
+    pcap_freecode(&fp);
     return 0;
 }

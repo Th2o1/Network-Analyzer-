@@ -3,5 +3,8 @@
     "files.associations": {
         "ethernet.h": "c",
         "stdio.h": "c"
-    }
+    },
+    "github-actions.workflows.pinned.workflows": [
+        ".github/workflows/c_cpp.yml"
+    ]
 }
