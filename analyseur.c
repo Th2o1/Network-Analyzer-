@@ -33,7 +33,7 @@ void handle_sigint(int sig) {
 void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_char *packet){
     (void)(verbos); // unused error 
     packet_size = pkthdr->len; // Total size of the packet put in global value
-    print_packet_number();
+    //print_packet_number();
     //parse_packet(packet);
     //print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
 }
