@@ -133,9 +133,9 @@ void parse_IPv4(const u_char *packet){
     printf("Destination Address: %s", inet_ntoa(ip_header->ip_dst)); // Destination IP address
     printf(") ");
 
-    if(ip_header->ip_hl * 4 > 20){ // If Size > 20 we have option
-        //print_ipv4_options((const u_char *)(packet + 20 + sizeof(struct ether_header)), packet_size - 20 - sizeof(struct ether_header));
-    }
+    // if(ip_header->ip_hl * 4 > 20){ // If Size > 20 we have option
+    //     //print_ipv4_options((const u_char *)(packet + 20 + sizeof(struct ether_header)), packet_size - 20 - sizeof(struct ether_header));
+    // }
 
     parse_protocol(ip_header->ip_p, packet,  (ip_header->ip_hl *4) + sizeof(struct ether_header));
     
