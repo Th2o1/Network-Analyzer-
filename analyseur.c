@@ -41,8 +41,9 @@ void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_ch
 int main(int argc, char *argv[]){
 
     char errbuf[PCAP_ERRBUF_SIZE];
-    char *interface, *file = NULL;
-    const char* bpf_filter;
+    memset(errbuf, 0, PCAP_ERRBUF_SIZE);
+    char *interface = NULL , *file = NULL;
+    const char* bpf_filter = NULL;
     verbosity = 1;
 
     int opt;
