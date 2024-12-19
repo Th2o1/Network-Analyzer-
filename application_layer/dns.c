@@ -207,8 +207,8 @@ void parse_dns(const u_char *packet, size_t header_size){
         printf("Type: %u, Class: %u\n", type, class);
     }
 
-    offset += parse_dns_rr(dns_header, offset, an_count, DNS_SECTION_ANSWER);
-    offset += parse_dns_rr(dns_header, offset, ns_count, DNS_SECTION_AUTHORITY);
-    offset += parse_dns_rr(dns_header, offset, ar_count, DNS_SECTION_ADDITIONAL);
+    //offset += parse_dns_rr(dns_header, offset, an_count, DNS_SECTION_ANSWER);
+    //offset += parse_dns_rr(dns_header, offset, ns_count, DNS_SECTION_AUTHORITY);
+    //offset += parse_dns_rr(dns_header, offset, ar_count, DNS_SECTION_ADDITIONAL);
 
 }
