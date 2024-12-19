@@ -113,29 +113,33 @@ void check_ipv4_flags(const struct ip *ip_header) {
 
 void parse_IPv4(const u_char *packet){
     struct ip* ip_header = (struct ip*)(packet + sizeof(struct ether_header));
-    printf("IPv4 (");
-    //print_raw_ip_header((unsigned char*)ip_header, ip_header->ip_hl * 4);
-    char* protocol = ip_header->ip_p == 6 ? "TCP" : "UDP"; //TCP has value 6 and UDP has value 17
-    printf("TTL: %d, Protocol: %s (%d) ", ip_header->ip_ttl, protocol, ip_header->ip_p); 
-    printf("Version: %d ", ip_header->ip_v);             // IP version
-    printf("Header Length: %d bytes ", ip_header->ip_hl * 4); // Header length in bytes
-    printf("Type of Service: %d ", ip_header->ip_tos);   // Type of service
-    printf("Total Length: %d ", ntohs(ip_header->ip_len)); // Total length of the packet
-    printf("Identification: %d ", ntohs(ip_header->ip_id)); // Identification
-    check_ipv4_flags(ip_header);                          // Flag
-    printf("TTL: %d ", ip_header->ip_ttl);                // Time to live
-    // Checksum
-    uint16_t calc_checksum = checksum_calc(ip_header, ip_header->ip_hl * 4);
-    printf("Checksum: 0x%04x (%s) ",
-           ntohs(ip_header->ip_sum),
-           (calc_checksum == 0x0000) ? "valid" : "invalid");
-    printf("Source Address: %s ", inet_ntoa(ip_header->ip_src)); // Source IP address
-    printf("Destination Address: %s", inet_ntoa(ip_header->ip_dst)); // Destination IP address
-    printf(") ");
-
-    // if(ip_header->ip_hl * 4 > 20){ // If Size > 20 we have option
-    //     //print_ipv4_options((const u_char *)(packet + 20 + sizeof(struct ether_header)), packet_size - 20 - sizeof(struct ether_header));
-    // }
+    if(verbosity == LOW){
+        printf("IPv4 ");
+    }
+    else{
+        printf("IPv4 (");
+        //print_raw_ip_header((unsigned char*)ip_header, ip_header->ip_hl * 4);
+        char* protocol = ip_header->ip_p == 6 ? "TCP" : "UDP"; //TCP has value 6 and UDP has value 17
+        printf("TTL: %d, Protocol: %s (%d) ", ip_header->ip_ttl, protocol, ip_header->ip_p); 
+        printf("Version: %d ", ip_header->ip_v);             // IP version
+        printf("Header Length: %d bytes ", ip_header->ip_hl * 4); // Header length in bytes
+        printf("Type of Service: %d ", ip_header->ip_tos);   // Type of service
+        printf("Total Length: %d ", ntohs(ip_header->ip_len)); // Total length of the packet
+        printf("Identification: %d ", ntohs(ip_header->ip_id)); // Identification
+        check_ipv4_flags(ip_header);                          // Flag
+        printf("TTL: %d ", ip_header->ip_ttl);                // Time to live
+        // Checksum
+        uint16_t calc_checksum = checksum_calc(ip_header, ip_header->ip_hl * 4);
+        printf("Checksum: 0x%04x (%s) ",
+               ntohs(ip_header->ip_sum),
+               (calc_checksum == 0x0000) ? "valid" : "invalid");
+        printf("Source Address: %s ", inet_ntoa(ip_header->ip_src)); // Source IP address
+        printf("Destination Address: %s", inet_ntoa(ip_header->ip_dst)); // Destination IP address
+        printf(") ");
+    }
+    if(ip_header->ip_hl * 4 > 20 && verbosity == HIGH){ // If Size > 20 we have option
+        //print_ipv4_options((const u_char *)(packet + 20 + sizeof(struct ether_header)), packet_size - 20 - sizeof(struct ether_header));
+    }
 
     parse_protocol(ip_header->ip_p, packet,  (ip_header->ip_hl *4) + sizeof(struct ether_header));
     

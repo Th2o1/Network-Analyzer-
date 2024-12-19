@@ -12,6 +12,7 @@
 #include <net/ethernet.h> // Detection IPv4 / IPv6 
 #include "global_value.h"
 #include "packet_parsing.h" // To manage the link layer (IPv4/6, ARP)
+#include <sys/time.h> // localtime
 
 // Function Header
 

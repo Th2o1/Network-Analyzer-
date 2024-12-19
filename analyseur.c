@@ -16,7 +16,7 @@ int packet_number = 0;
 // To know the packet number (debigging)
 void print_packet_number(){
     packet_number++;
-    printf("Packet captured : %d\n", packet_number);
+    printf("Packet number : %d \n", packet_number);
 }
 
 void handle_sigint(int sig) {
@@ -33,9 +33,25 @@ void handle_sigint(int sig) {
 void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_char *packet){
     (void)(verbos); // unused error 
     packet_size = pkthdr->len; // Total size of the packet put in global value
-    print_packet_number();
+    char buffer[64];
+    if (verbosity >= MEDIUM)
+    {
+        print_packet_number();
+    }
+    
+    // Formatting time to be readable 
+    struct tm *tm_time = localtime(&pkthdr->ts.tv_sec); // conversion in tm struct
+    strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_time);
+    printf("%s.%03d ", buffer, pkthdr->ts.tv_usec);
+
+    // Parsing the packet 
     parse_packet(packet);
-    print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
+    // Printing the packet
+    if(verbosity == HIGH){
+        print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
+    }
+
+    printf("\n-------------------------\n");
 }
 
 int main(int argc, char *argv[]){

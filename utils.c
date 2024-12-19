@@ -66,7 +66,6 @@ void print_packet(const unsigned char *packet, int length) {
         for(int j = 0 ; j<length % 16; j++) printf("%c", ascii_line[j]);
         printf("\n");
     }
-    printf("---------------------");
 }
 
 

@@ -10,6 +10,7 @@
 
 #include "../global_value.h"
 #include "../application_layer/telnet.h"
+#include "../application_layer/dns.h"
 
 #ifdef __linux__
 #define TH_FLAGS        (TH_FIN|TH_SYN|TH_RST|TH_ACK|TH_URG|TH_ECE|TH_CWR)

@@ -110,6 +110,9 @@ void parse_tcp(const u_char *packet, size_t header_size) {
         printf("Telnet ");
         if (packet_size-offset != 0)parse_telnet(packet, offset);
     }
+    if (src_port == 53 || dst_port == 53){
+        parse_dns(packet, header_size + sizeof(struct tcphdr));
+    }
     if (packet_size-offset != 0 && application_layer) parse_ascii(packet, offset);
     return;
 }

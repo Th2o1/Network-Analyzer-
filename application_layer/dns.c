@@ -24,7 +24,7 @@ void process_dns_flags(uint16_t flags) {
             printf("IQUERY ");
             break;
         case 2:
-            printf("TATUS ");
+            printf("STATUS ");
             break;
         default:
             printf("Unknown ");

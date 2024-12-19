@@ -15,10 +15,13 @@ void parse_packet(const u_char *packet){
              ntohs(eth_header->ether_type) == ETHERTYPE_REVARP){ // ARP case 
         parse_ARP(packet);
     }
+    else if (ntohs(eth_header->ether_type) == ETHERTYPE_LOOPBACK){
+        printf("loopback");
+    }
     else{
         printf(" ethertype not found ");
     }
-    printf("\n-----\n");
+    
 }
 
 void parse_protocol(u_char protocol, const u_char *packet, size_t header_size){
