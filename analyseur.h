@@ -13,6 +13,11 @@
 #include "global_value.h"
 #include "packet_parsing.h" // To manage the link layer (IPv4/6, ARP)
 #include <sys/time.h> // localtime
+#ifdef __linux__
+#include <time.h>
+#endif
+
+
 
 // Function Header
 
