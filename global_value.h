@@ -21,9 +21,9 @@
 #define HIGH 3
 
 // Give the level of verbosity needed (1 : low / 2 : medium / 3 : high)
-int verbosity;
+extern int verbosity;
 // Total lenght of the packet (with all layer)
-size_t packet_size;
+extern size_t packet_size;
 
 /**
  * Calculates the Internet Checksum (16-bit one's complement) for a given buffer of data.
