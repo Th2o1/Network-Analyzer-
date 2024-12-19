@@ -5,7 +5,8 @@
 // f optio
 // v pas obliger pas defaut
 
-
+int verbosity = 0;
+size_t packet_size = 0;
 // Capture session
 pcap_t* capture_session;
 // Filter
