@@ -4,6 +4,7 @@ DATALINK_FOLDER = datalink_layer/
 NETWORK_FOLDER = network_layer/
 TRANSPORT_FOLDER = transport_layer/
 APPLICATION_FOLDER = application_layer/
+VERBOSITY = 3
 # Source and object files
 SRC = analyseur.c packet_parsing.c utils.c $(wildcard $(DATALINK_FOLDER)*.c)  $(wildcard $(NETWORK_FOLDER)*.c) $(wildcard $(TRANSPORT_FOLDER)*.c) $(wildcard $(APPLICATION_FOLDER)*.c) 
 OBJ = $(SRC:.c=.o)
@@ -18,7 +19,7 @@ all: $(EXEC)
 
 # Build the executable
 $(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ) $(LDFLAGS) -v $(VERBOSITY)
 
 # Build object files
 %.o: %.c %.h
@@ -30,53 +31,53 @@ clean:
 
 # Launch the program for testing
 start: $(EXEC)
-	./$(EXEC) -i en0
+	./$(EXEC) -i en0 -v $(VERBOSITY)
 
 # Run specific tests with predefined pcap files
 arp: $(EXEC)
-	./$(EXEC) -o data/arp-storm.pcap
+	./$(EXEC) -o data/arp-storm.pcap -v $(VERBOSITY)
 
 arp2: $(EXEC)
-	./$(EXEC) -o data/rarp_req_reply.pcapng
+	./$(EXEC) -o data/rarp_req_reply.pcapng -v $(VERBOSITY)
 
 ipv4: $(EXEC)
-	./$(EXEC) -o data/ipv4.pcap
+	./$(EXEC) -o data/ipv4.pcap -v $(VERBOSITY)
 
 ipopt: $(EXEC)
-	./$(EXEC) -o data/ipv4_cipso_option.pcap
+	./$(EXEC) -o data/ipv4_cipso_option.pcap -v $(VERBOSITY)
 
 tcp: $(EXEC)
-	./$(EXEC) -o data/IPv4_TCP.pcapng
+	./$(EXEC) -o data/IPv4_TCP.pcapng -v $(VERBOSITY)
 
 smtp: $(EXEC)
-	./$(EXEC) -o data/smtp.pcap
+	./$(EXEC) -o data/smtp.pcap -v $(VERBOSITY)
 
 http: $(EXEC)
-	./$(EXEC) -o data/http.pcap
+	./$(EXEC) -o data/http.pcap -v $(VERBOSITY)
 
 telnet: $(EXEC)
-	./$(EXEC) -o data/telnet-cooked.pcap
+	./$(EXEC) -o data/telnet-cooked.pcap -v $(VERBOSITY)
 
 ftp: $(EXEC)
-	./$(EXEC) -o data/ftp.pcap
+	./$(EXEC) -o data/ftp.pcap -v $(VERBOSITY)
 
 imap: $(EXEC)
-	./$(EXEC) -o data/imap.cap
+	./$(EXEC) -o data/imap.cap -v $(VERBOSITY)
 
 pop: $(EXEC)
-	./$(EXEC) -o data/pop-ssl.pcapng
+	./$(EXEC) -o data/pop-ssl.pcapng -v $(VERBOSITY)
 
 icmp: $(EXEC)
-	./$(EXEC) -o data/icmp.pcapng
+	./$(EXEC) -o data/icmp.pcapng -v $(VERBOSITY)
 
 ipv6: $(EXEC)
-	./$(EXEC) -o data/v6.pcap
+	./$(EXEC) -o data/v6.pcap -v $(VERBOSITY)
 
 udp: $(EXEC)
-	./$(EXEC) -o data/dhcp.pcap
+	./$(EXEC) -o data/dhcp.pcap -v $(VERBOSITY)
 
 dns: $(EXEC)
-	./$(EXEC) -o data/dns.pcapng
+	./$(EXEC) -o data/dns.pcapng -v $(VERBOSITY)
 
 
 # Display help information
