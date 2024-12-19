@@ -40,7 +40,7 @@ uint16_t checksum_calc(const void *vdata, size_t length) {
 
 // Debugging purpose 
 void print_packet(const unsigned char *packet, int length) {
-    printf("Packet dump (length: %d bytes):\n", length);
+    printf("\nPacket (length: %d bytes):\n", length);
     int ligne_number = 0;
     char ascii_line[17];
     ascii_line[16] = '\0';

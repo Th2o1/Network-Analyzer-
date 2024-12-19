@@ -92,8 +92,8 @@ int main(int argc, char *argv[]){
         fprintf(stderr, "Usage: %s [-i interface] [-o file]\n", argv[0]);
         return 1;
     }
-
     
+    // Catch the ctrl-c to finalize the prog
     signal(SIGINT, handle_sigint);
     if(interface != NULL){
         capture_session = pcap_open_live(interface, BUFSIZ, 1, 1000, errbuf); 

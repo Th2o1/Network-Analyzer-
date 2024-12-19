@@ -18,8 +18,9 @@ void parse_IPv6(const u_char *packet){
     printf("Flow Label %u ", ipv6_header->ip6_flow);
     printf("Payload length %u ",ipv6_header->ip6_plen);
     printf("Hops Limits %u ",ipv6_header->ip6_hlim);
-    printf("Source %s ", src_addr);
-    printf("Destination %s ", dst_addr);
+    
+    printf("%s > ", src_addr);
+    printf("%s ", dst_addr);
 
     printf(") ");
 
