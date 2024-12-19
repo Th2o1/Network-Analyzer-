@@ -12,9 +12,11 @@
 #include "../application_layer/telnet.h"
 
 #ifdef __linux__
+#define TH_FLAGS        (TH_FIN|TH_SYN|TH_RST|TH_ACK|TH_URG|TH_ECE|TH_CWR)
 #define TH_ECE 0x40
 #define TH_CWR 0x80
 #endif
+
 
 //Function Header 
 /**
