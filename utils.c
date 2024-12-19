@@ -92,11 +92,11 @@ void parse_ascii(const u_char *packet, size_t offset){
     if ( !((c >= 32 && c <= 126) || c == 10 || c == 13 )) return;// Character is NOT in ASCII (or a space)
     }   
     // Print the payload line by line
-    char *line = strtok(payload_data, "\r\n");
-    while (line != NULL) {
-        printf("  %s\n", line);
-        line = strtok(NULL, "\r\n");
-    }
+    // char *line = strtok(payload_data, "\r\n");
+    // while (line != NULL) {
+    //     printf("  %s\n", line);
+    //     line = strtok(NULL, "\r\n");
+    // }
 
     free(payload_data);
 }
