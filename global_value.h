@@ -1,3 +1,5 @@
+#ifndef GLOBAL_VALUE
+#define GLOBAL_VALUE
 // Define for verbosity 
 #include <stdint.h>
 #include <stddef.h>
@@ -40,3 +42,5 @@ uint16_t checksum_calc(const void *vdata, size_t length);
 void print_packet(const unsigned char *packet, int length);
 void print_ether_address(const u_char* addr); 
 void parse_ascii(const u_char *packet, size_t offset);   
+
+#endif
