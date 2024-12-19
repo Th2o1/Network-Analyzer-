@@ -189,7 +189,7 @@ void parse_dns(const u_char *packet, size_t header_size){
 
     printf("TID: 0x%04x ", transaction_id);
     process_dns_flags(flags);
-    printf("Querie :%u ", qd_count);
+    printf("Querie : %u ", qd_count);
     printf("Answer: %u ", an_count);
     printf("Authority: %u ", ns_count);
     printf("Additional: %u ", ar_count);
