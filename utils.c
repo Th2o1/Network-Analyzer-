@@ -86,7 +86,7 @@ void parse_ascii(const u_char *packet, size_t offset){
     memcpy(payload_data, payload, length);
     payload_data[length] = '\0';
 
-    //if (!(c >= 32 || c <= 126)) return // Character is NOT in ASCII
+    if (!(c >= 32 || c <= 126)) return // Character is NOT in ASCII
     for (int i = 0; i < length; i++) {
         char c = payload_data[i];
         if ( !((c >= 32 && c <= 126) || c == 10 || c == 13 )) return;// Character is NOT in ASCII (or a space)
