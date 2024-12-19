@@ -48,7 +48,7 @@ void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_ch
     parse_packet(packet);
     // Printing the packet
     if(verbosity == HIGH){
-        print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
+        //print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
     }
 
     printf("\n-------------------------\n");

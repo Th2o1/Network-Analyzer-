@@ -35,46 +35,49 @@ void parse_tcp(const u_char *packet, size_t header_size) {
     // Extract source port, destination port, sequence number, ack number, data offset, window size, urgent pointer from the header
     uint16_t src_port = ntohs(tcp_header->th_sport);
     uint16_t dst_port = ntohs(tcp_header->th_dport);
-    uint8_t sequence_number = tcp_header->th_seq;
-    uint8_t ack_number = tcp_header->th_ack;
+    tcp_seq sequence_number = ntohs(tcp_header->th_seq);
+    tcp_seq ack_number = ntohs(tcp_header->th_ack);
     uint16_t data_offset = tcp_header->th_off;
     uint16_t window_size = ntohs(tcp_header->th_win);
     uint16_t urgent_pointer = tcp_header->th_urp;
 
     // Print basic TCP information
-    printf("TCP Source %u Destination %u ", src_port, dst_port);
-    printf("Sequence %u Ack %u ", sequence_number, ack_number);
-    printf("Data offset %u ", data_offset);
-
-    // Call the checksum validation function
-    struct ip *ip_header = (struct ip *)packet;
-    uint16_t calculated_checksum = validate_tcp_checksum(ip_header, tcp_header);
-    printf("CLAC : 0x%04x ", calculated_checksum);
-
-    // Print checksum result
-    printf("Checksum 0x%04x (%s) ", tcp_header->th_sum,
+    printf("TCP: ");
+    if(verbosity >= MEDIUM){
+        printf("TCP %u > %u, ", src_port, dst_port);
+        // Call the checksum validation function
+        struct ip *ip_header = (struct ip *)(packet+header_size);
+        uint16_t calculated_checksum = validate_tcp_checksum(ip_header, tcp_header);
+        // Print checksum result
+        printf("Checksum 0x%04x (%s) ", tcp_header->th_sum,
            (calculated_checksum == 0x0000) ? "valid" : "invalid");
 
+    }
     // Check TCP flags
     check_tcp_flags(tcp_header->th_flags);
-
+    printf("Sequence %u, Ack %u ", sequence_number, ack_number);
+    printf("Data offset %u,", data_offset);
     // Print Window Size
     printf("Window %u ", window_size);
 
+
+
+
+
     // Print Urgent Pointer
-    printf("Urgent Pointer %u ", urgent_pointer);
+    if(verbosity >= MEDIUM)printf("Urgent Pointer %u ", urgent_pointer);
 
     // Check TCP options
-    if (data_offset > 5) {
+    if (data_offset > 5 && verbosity == HIGH) {
         const u_char* tcp_options = (const u_char*) tcp_header + 20;
         unsigned int options_size = (data_offset * 4) - 20;
         check_tcp_options(tcp_options, options_size);
+        printf("\n");
     }
 
     // Calc the offset for the next layer
     size_t tcp_header_size = data_offset * 4;
     size_t offset =  header_size + tcp_header_size;
-
     int application_layer = 0;
     // Check for SMTP traffic based on port
     if (src_port == 25 || dst_port == 25 || 
@@ -123,7 +126,7 @@ void check_tcp_flags(uint8_t flags) {
     if(!(flags & TH_FLAGS)){
         return;
     }
-    printf("Flags:");
+    printf("Flags [");
     if (flags & TH_FIN) printf(" FIN");
     if (flags & TH_SYN) printf(" SYN");
     if (flags & TH_RST) printf(" RST");
@@ -132,7 +135,7 @@ void check_tcp_flags(uint8_t flags) {
     if (flags & TH_URG) printf(" URG");
     if (flags & TH_ECE) printf(" ECE");
     if (flags & TH_CWR) printf(" CWR");
-    printf(" ");
+    printf(" ], ");
 
     return;
 
@@ -142,6 +145,7 @@ void check_tcp_flags(uint8_t flags) {
 void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
     u_char kind;
     u_char length;
+    printf("Option: ");
     char* option_name ="";
     while (options_size > 0) {
         kind = *tcp_options;
@@ -150,30 +154,30 @@ void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
         switch (kind)
         {
         case TCPOPT_EOL: // End of option
-            option_name = "End of Options List (EOL)";
+            option_name = "EOL";
             length = 1; //  No specif length
             break;
         case TCPOPT_NOP: // No operation
-            option_name = "No-Operation (NOP)";
+            option_name = "NOP";
             length = 1; // No specif length
             break;
         case TCP_MAXSEG: //
-            option_name = "Max segs (MSS) ";
+            option_name = "MSS";
             break;
         case TCPOPT_WINDOW: // Window Scale
             option_name = "Window Scale";
             break;
         case TCPOPT_SACK_PERMITTED: // SACK Permitted
-            option_name = "Selective Acknowledgment Permitted (SACK)";
+            option_name = "Selective Acknowledgment Permitted";
             break;
         case TCPOPT_SACK: // SACK
-            option_name = "Selective Acknowledgment (SACK)";
+            option_name = "SACK";
             break;
         case TCPOPT_TIMESTAMP: // Timestamp
-            option_name = "Timestamp Option";
+            option_name = "Timestamp";
             break;
         default:
-            option_name = "Unknown Option";
+            option_name = "Unknown";
             length = *(tcp_options + 1);
             if (options_size > 1) {
                 length = *(tcp_options + 1); 
@@ -183,7 +187,7 @@ void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
             break;
         }
         // Display the option
-        printf("Option: %s (Kind = %u, Length = %u) ", option_name, kind, length);
+        printf("%s (Kind = %u, Length = %u), ", option_name, kind, length);
 
         // Check the length
         if (length < 1 || length > options_size) {
