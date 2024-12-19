@@ -1,6 +1,5 @@
 #include "analyseur.h"
 
-extern int verbosity;
 // tcpdump -r data/smtp.pcap -n -vv
 // i ou bien o
 // f optio
