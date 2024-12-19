@@ -12,15 +12,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libpcap-dev build-essential net-tools
+        sudo apt-get install -y libpcap-dev build-essential net-tools valgrind
+
     - name: Compile project
       run: make
-    - name: Run tests 
+
+    - name: Run tests with Valgrind
       run: |
-        make
-        valgrind make smtp  
+        valgrind --leak-check=full --track-origins=yes --error-exitcode=1 make smtp
+
     - name: Clean build
       run: make clean
