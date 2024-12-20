@@ -196,10 +196,9 @@ int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_sec
 
 
             // Parse the fields
-            uint32_t ttl = 0;
             uint16_t type = (dns_header[offset] << 8) | dns_header[offset + 1];
             uint16_t class = (dns_header[offset + 2] << 8) | dns_header[offset + 3];
-            ttl = (dns_header[offset + 4] << 24) | (dns_header[offset + 5] << 16) |
+            uint32_t ttl = (dns_header[offset + 4] << 24) | (dns_header[offset + 5] << 16) |
                     (dns_header[offset + 6] << 8) | dns_header[offset + 7];
             
             // Print details
@@ -295,10 +294,10 @@ void parse_dns(const u_char *packet, size_t header_size){
         }
     }
 
-    //offset += parse_dns_rr(dns_header, offset, an_count, DNS_SECTION_ANSWER);
+    offset += parse_dns_rr(dns_header, offset, an_count, DNS_SECTION_ANSWER);
     if(verbosity == LOW) return;
-    //offset += parse_dns_rr(dns_header, offset, ns_count, DNS_SECTION_AUTHORITY);
-    //offset += parse_dns_rr(dns_header, offset, ar_count, DNS_SECTION_ADDITIONAL);
+    offset += parse_dns_rr(dns_header, offset, ns_count, DNS_SECTION_AUTHORITY);
+    offset += parse_dns_rr(dns_header, offset, ar_count, DNS_SECTION_ADDITIONAL);
 
 
 }
