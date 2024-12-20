@@ -67,19 +67,6 @@ void print_ipv4_options(const u_char *options, size_t size) {
     }
 }
 
-
-// Debugging
-void print_raw_ip_header(const unsigned char *packet, size_t size) {
-    printf("Raw IP Header: ");
-    for (size_t i = 0; i < size; i++) {
-        printf("%02x ", packet[i]);
-        if ((i + 1) % 16 == 0) { 
-            printf(" ");
-        }
-    }
-    printf(" ");
-}
-
 void check_ipv4_flags(const struct ip *ip_header) {
     uint16_t flags_and_offset = ntohs(ip_header->ip_off); // Conversion to host byte order
     printf("Flags [");
@@ -119,7 +106,6 @@ void parse_IPv4(const u_char *packet){
         printf("%s", inet_ntoa(ip_header->ip_dst)); // Destination IP address
     }
     else{
-        //print_raw_ip_header((unsigned char*)ip_header, ip_header->ip_hl * 4);
          //TCP has value 6 and UDP has value 17
         printf("TTL: %d, Protocol: ", ip_header->ip_ttl); 
         display_protocol(ip_header->ip_p);

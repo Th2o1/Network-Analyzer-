@@ -23,7 +23,7 @@
  * @param ar_op The operation code from the ARP header (e.g., ARPOP_REQUEST, ARPOP_REPLY).
  *              This indicates the type of ARP operation.
  */
-void parse_ARP_operation(u_short ar_op);
+void parse_ARP_operation(u_short ar_op, const struct ether_arp *arp_header);
 
 /**
  * @brief Display the protocol address format of an ARP packet.
