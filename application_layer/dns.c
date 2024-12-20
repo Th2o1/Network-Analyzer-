@@ -199,8 +199,6 @@ int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_sec
         if(verbosity>=MEDIUM){    
             printf("\n[%s %d]\n", get_section_name(section_type), i + 1);
 
-
-            
             // Print details
             printf("Name: %s\n", dns_name);
             process_dns_type(type);
