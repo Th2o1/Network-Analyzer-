@@ -203,11 +203,10 @@ int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_sec
             
             // Print details
             printf("Name: %s\n", dns_name);
-            if(verbosity == HIGH){
-                process_dns_type(type);
-                process_dns_class(class);
-                printf("TTL: %u, Data Length: %u\n", ttl, data_length);
-            }
+            process_dns_type(type);
+            process_dns_class(class);
+            printf("TTL: %u, Data Length: %u\n", ttl, data_length);
+            
             // Print the data (could be IP, name, etc., depending on the type)
             printf("Data: ");
         }
