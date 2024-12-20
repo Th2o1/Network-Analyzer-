@@ -190,16 +190,16 @@ int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_sec
         int name_size = get_dns_name(dns_header, offset, dns_name);
         offset += name_size;
         uint16_t data_length = (dns_header[offset + 8] << 8) | dns_header[offset + 9];
+        // Parse the fields
+        uint16_t type = (dns_header[offset] << 8) | dns_header[offset + 1];
+        uint16_t class = (dns_header[offset + 2] << 8) | dns_header[offset + 3];
+        uint32_t ttl = (dns_header[offset + 4] << 24) | (dns_header[offset + 5] << 16) |
+                (dns_header[offset + 6] << 8) | dns_header[offset + 7];
         
         if(verbosity>=MEDIUM){    
             printf("\n[%s %d]\n", get_section_name(section_type), i + 1);
 
 
-            // Parse the fields
-            uint16_t type = (dns_header[offset] << 8) | dns_header[offset + 1];
-            uint16_t class = (dns_header[offset + 2] << 8) | dns_header[offset + 3];
-            uint32_t ttl = (dns_header[offset + 4] << 24) | (dns_header[offset + 5] << 16) |
-                    (dns_header[offset + 6] << 8) | dns_header[offset + 7];
             
             // Print details
             printf("Name: %s\n", dns_name);
