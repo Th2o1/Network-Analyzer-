@@ -46,7 +46,7 @@ void parse_tcp(const u_char *packet, size_t header_size) {
     if(verbosity >= MEDIUM){
         printf("TCP %u > %u, ", src_port, dst_port);
         // Call the checksum validation function
-        struct ip *ip_header = (struct ip *)(packet+header_size);
+        struct ip *ip_header = (struct ip *)(packet+sizeof(struct ether_header));
         uint16_t calculated_checksum = validate_tcp_checksum(ip_header, tcp_header);
         // Print checksum result
         printf("Checksum 0x%04x (%s) ", tcp_header->th_sum,

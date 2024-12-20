@@ -38,6 +38,9 @@ void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_ch
     {
         print_packet_number();
     }
+    else{
+        printf("\n");
+    }
     
     // Formatting time to be readable 
     struct tm *tm_time = localtime(&pkthdr->ts.tv_sec); // conversion in tm struct
