@@ -1,5 +1,7 @@
 #include "dns.h"
 
+char dns_name[256];
+
 void process_dns_type(uint16_t type) {
     printf("Type: ");
     switch (type) {
@@ -180,15 +182,14 @@ char* get_section_name(dns_section section_type){
 }
 
 int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_section section_type) {
-    char dns_name[256]; // Buffer to store the domain name
+    
     if (count <= 0){ // If no section
         return 0;
     }
     for (int i = 0; i < count; i++) {
 
         // Parse the name
-        int name_size = get_dns_name(dns_header, offset, dns_name);
-        offset += name_size;
+        offset += 2;
         uint16_t data_length = (dns_header[offset + 8] << 8) | dns_header[offset + 9];
         // Parse the fields
         uint16_t type = (dns_header[offset] << 8) | dns_header[offset + 1];
@@ -210,22 +211,22 @@ int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_sec
         }
         offset += 10; // type (2) + Class (2) + ttl (4) + data length (2)
         for (int j = 0; j < data_length; j += 4) {
-        if (j + 3 < data_length) {
-            printf("%u.%u.%u.%u ", 
-                   dns_header[offset + j], 
-                   dns_header[offset + j + 1], 
-                   dns_header[offset + j + 2], 
-                   dns_header[offset + j + 3]);
-        } else {
-            for (int k = j; k < data_length; ++k) {
-                printf("%u", dns_header[offset + k]);
-                if (k < data_length - 1) {
-                    printf(".");
+            if (j + 3 < data_length) {
+                printf("%u.%u.%u.%u ", 
+                       dns_header[offset + j], 
+                       dns_header[offset + j + 1], 
+                       dns_header[offset + j + 2], 
+                       dns_header[offset + j + 3]);
+            } else {
+                for (int k = j; k < data_length; ++k) {
+                    printf("%u", dns_header[offset + k]);
+                    if (k < data_length - 1) {
+                        printf(".");
+                    }
                 }
             }
         }
         if(verbosity == LOW) return 0; // stop after one rotation to have the data
-        }
         printf("\n");
         offset += data_length;
     }
@@ -256,7 +257,7 @@ void parse_dns(const u_char *packet, size_t header_size){
 
 
     size_t offset = 12; // Where we are in the dns
-    char dns_name[256]; // To stock the domain name
+     // To stock the domain name
 
     printf("TID: 0x%04x ", transaction_id);
     int is_response = process_dns_flags(flags);
