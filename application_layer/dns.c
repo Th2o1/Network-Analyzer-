@@ -182,7 +182,10 @@ char* get_section_name(dns_section section_type){
 }
 
 int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_section section_type) {
-    
+    uint16_t type;
+    uint16_t class;
+    uint32_t ttl;
+    uint16_t data_length;
     if (count <= 0){ // If no section
         return 0;
     }
@@ -190,11 +193,11 @@ int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_sec
 
         // Parse the name
         offset += 2;
-        uint16_t data_length = (dns_header[offset + 8] << 8) | dns_header[offset + 9];
+        data_length = (dns_header[offset + 8] << 8) | dns_header[offset + 9];
         // Parse the fields
-        uint16_t type = (dns_header[offset] << 8) | dns_header[offset + 1];
-        uint16_t class = (dns_header[offset + 2] << 8) | dns_header[offset + 3];
-        uint32_t ttl = (dns_header[offset + 4] << 24) | (dns_header[offset + 5] << 16) |
+        type = (dns_header[offset] << 8) | dns_header[offset + 1];
+        class = (dns_header[offset + 2] << 8) | dns_header[offset + 3];
+        ttl = (dns_header[offset + 4] << 24) | (dns_header[offset + 5] << 16) |
                 (dns_header[offset + 6] << 8) | dns_header[offset + 7];
         
         if(verbosity>=MEDIUM){    
