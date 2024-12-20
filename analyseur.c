@@ -16,12 +16,12 @@ int packet_number = 0;
 // To know the packet number (debigging)
 void print_packet_number(){
     packet_number++;
-    printf("Packet number : %d \n", packet_number);
+    printf("\n---------------------- n° %d\n", packet_number);
 }
 
 void handle_sigint(int sig) {
     (void)(sig);
-    printf("\nCleaning up before exiting...\n\n");
+    printf("\n\nCleaning up before stopping...\n\n");
     
     pcap_close(capture_session);
     pcap_freecode(&fp);
@@ -48,10 +48,8 @@ void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_ch
     parse_packet(packet);
     // Printing the packet
     if(verbosity == HIGH){
-        //print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
+        print_packet(packet, packet_size); //Print raw packet (usefull for debuging)
     }
-
-    printf("\n-------------------------\n");
 }
 
 int main(int argc, char *argv[]){

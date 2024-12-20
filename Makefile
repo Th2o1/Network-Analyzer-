@@ -32,6 +32,12 @@ clean:
 # Launch the program for testing
 start: $(EXEC)
 	./$(EXEC) -i en0 -v $(VERBOSITY)
+start1: $(EXEC)
+	./$(EXEC) -i en0 -v 1
+start2: $(EXEC)
+	./$(EXEC) -i en0 -v 2
+start3: $(EXEC)
+	./$(EXEC) -i en0 -v 3
 
 # Rebuild for debugging
 rebuild : clean all
@@ -85,18 +91,28 @@ dns: $(EXEC)
 
 # Display help information
 help:
-	@echo "Usage : make [target]"
-	@echo
 	@echo "Available targets:"
-	@echo "  all        : Build the $(EXEC) executable"
-	@echo "  start      : Run the program with the 'en0' interface"
-	@echo "  arp        : Analyze ARP packets in 'data/arp-storm.pcap'"
-	@echo "  ipv4       : Analyze IPv4 packets in 'data/ipv4.pcap'"
-	@echo "  ipv4_tcp   : Analyze IPv4 TCP packets in 'data/IPv4_TCP.pcapng'"
-	@echo "  icmp       : Analyze ICMP packets in 'data/icmp.pcapng'"
-	@echo "  ipv6       : Analyze IPv6 packets in 'data/v6.pcap'"
-	@echo "  clean      : Remove object files and the executable"
-	@echo "  help       : Display this help message"
-
+	@echo "  all         : Compile the executable."
+	@echo "  clean       : Remove all generated files."
+	@echo "  rebuild     : Clean and rebuild the project."
+	@echo "  start       : Run with default verbosity."
+	@echo "  start1      : Run with verbosity level 1."
+	@echo "  start2      : Run with verbosity level 2."
+	@echo "  start3      : Run with verbosity level 3."
+	@echo "  arp         : Test with ARP storm data."
+	@echo "  arp2        : Test with RARP request/reply data."
+	@echo "  ipv4        : Test with IPv4 data."
+	@echo "  ipopt       : Test with IPv4 options."
+	@echo "  tcp         : Test with TCP data."
+	@echo "  smtp        : Test with SMTP data."
+	@echo "  http        : Test with HTTP data."
+	@echo "  telnet      : Test with Telnet data."
+	@echo "  ftp         : Test with FTP data."
+	@echo "  imap        : Test with IMAP data."
+	@echo "  pop         : Test with POP data."
+	@echo "  icmp        : Test with ICMP data."
+	@echo "  ipv6        : Test with IPv6 data."
+	@echo "  udp         : Test with UDP data."
+	@echo "  dns         : Test with DNS data."
 # Declare phony targets to avoid conflicts with files
 .PHONY: all clean help start arp ipv4 ipv4_tcp icmp ipv6
