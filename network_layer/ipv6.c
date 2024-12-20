@@ -30,6 +30,6 @@ void parse_IPv6(const u_char *packet){
         printf("\n");
     }
 
-    //parse_protocol(ipv6_header->ip6_nxt, packet, 40+sizeof(struct ether_header));
+    parse_protocol(ipv6_header->ip6_nxt, packet, 40+sizeof(struct ether_header));
 
 }

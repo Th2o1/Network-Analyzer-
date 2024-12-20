@@ -4,7 +4,7 @@ DATALINK_FOLDER = datalink_layer/
 NETWORK_FOLDER = network_layer/
 TRANSPORT_FOLDER = transport_layer/
 APPLICATION_FOLDER = application_layer/
-VERBOSITY = 3 
+VERBOSITY = 3
 # Source and object files
 SRC = analyseur.c packet_parsing.c utils.c $(wildcard $(DATALINK_FOLDER)*.c)  $(wildcard $(NETWORK_FOLDER)*.c) $(wildcard $(TRANSPORT_FOLDER)*.c) $(wildcard $(APPLICATION_FOLDER)*.c) 
 OBJ = $(SRC:.c=.o)
