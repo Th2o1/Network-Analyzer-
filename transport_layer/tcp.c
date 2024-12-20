@@ -72,7 +72,7 @@ void parse_tcp(const u_char *packet, size_t header_size) {
         const u_char* tcp_options = (const u_char*) tcp_header + 20;
         unsigned int options_size = (data_offset * 4) - 20;
         check_tcp_options(tcp_options, options_size);
-        printf("\n");
+
     }
 
     // Calc the offset for the next layer
@@ -187,15 +187,21 @@ void check_tcp_options(const u_char* tcp_options ,unsigned int options_size){
             break;
         }
         // Display the option
-        printf("%s (Kind = %u, Length = %u), ", option_name, kind, length);
+        printf("%s (Kind = %u, Length = %u)", option_name, kind, length);
 
         // Check the length
         if (length < 1 || length > options_size) {
-            printf("Erreur: Longueur d'option invalide (%u)\n", length);
+            printf("Erreur: Longueur d'option invalide (%u)", length);
             break; // Avoid infinite loop
         }
         // Decrease size left and moving the pointer 
         options_size -= length;
+        if(options_size == 0){
+            printf("\n");
+        } 
+        else{
+            printf(", ");
+        }
         tcp_options += length;
     }
     return ;

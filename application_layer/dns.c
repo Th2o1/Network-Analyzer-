@@ -5,31 +5,31 @@ char dns_name[256];
 void process_dns_type(uint16_t type) {
     printf("Type: ");
     switch (type) {
-        case 1:
+        case TYPE_A:
             printf("A ");
             break;
-        case 2:
+        case TYPE_NS:
             printf("NS ");
             break;
-        case 5:
+        case TYPE_CNAME:
             printf("CNAME ");
             break;
-        case 6:
+        case TYPE_SOA:
             printf("SOA ");
             break;
-        case 12:
+        case TYPE_PTR:
             printf("PTR ");
             break;
-        case 15:
+        case TYPE_MX:
             printf("MX ");
             break;
-        case 16:
+        case TYPE_TXT:
             printf("TXT ");
             break;
-        case 28:
+        case TYPE_AAAA:
             printf("AAAA ");
             break;
-        case 33:
+        case TYPE_SRV:
             printf("SRV ");
             break;
         default:
@@ -42,13 +42,13 @@ void process_dns_type(uint16_t type) {
 void process_dns_class(uint16_t class) {
     printf("Class: ");
     switch (class) {
-        case 1:
+        case CLASS_IN:
             printf("IN ");
             break;
-        case 3:
+        case CLASS_CH:
             printf("CH ");
             break;
-        case 4:
+        case CLASS_HS:
             printf("HS ");
             break;
         default:
@@ -181,6 +181,47 @@ char* get_section_name(dns_section section_type){
     }
 }
 
+void process_dns_data(uint16_t type, const unsigned char *dns_data) {
+    switch (type) {
+        case TYPE_A: // A record (IPv4 address)
+            printf("%u.%u.%u.%u", dns_data[0], dns_data[1], dns_data[2], dns_data[3]);
+            break;
+        case TYPE_CNAME: // CNAME record
+            printf("%s", dns_name);
+            break;
+        case TYPE_PTR: // PTR record
+            printf("%s", dns_data);
+            break;
+        case TYPE_MX: // MX record
+            printf("Preference: %u, Mail Server: %s", (dns_data[0] << 8) | dns_data[1], dns_data + 2);
+            break;
+        case TYPE_TXT: // TXT record
+            printf("Text: %s", dns_data);
+            break;
+        case TYPE_AAAA: // AAAA record (IPv6 address)
+            printf("%x:%x:%x:%x:%x:%x:%x:%x",
+                   (dns_data[0] << 8) | dns_data[1],
+                   (dns_data[2] << 8) | dns_data[3],
+                   (dns_data[4] << 8) | dns_data[5],
+                   (dns_data[6] << 8) | dns_data[7],
+                   (dns_data[8] << 8) | dns_data[9],
+                   (dns_data[10] << 8) | dns_data[11],
+                   (dns_data[12] << 8) | dns_data[13],
+                   (dns_data[14] << 8) | dns_data[15]);
+            break;
+        case TYPE_SRV: // SRV record
+            printf("Priority: %u, Weight: %u, Port: %u, Target: %s",
+                   (dns_data[0] << 8) | dns_data[1],
+                   (dns_data[2] << 8) | dns_data[3],
+                   (dns_data[4] << 8) | dns_data[5],
+                   dns_data + 6);
+            break;
+        default:
+            printf("Unknown data format");
+            break;
+    }
+}
+
 int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_section section_type) {
     uint16_t type;
     uint16_t class;
@@ -213,22 +254,7 @@ int parse_dns_rr(const unsigned char *dns_header, int offset, int count, dns_sec
             printf("Data: ");
         }
         offset += 10; // type (2) + Class (2) + ttl (4) + data length (2)
-        for (int j = 0; j < data_length; j += 4) {
-            if (j + 3 < data_length) {
-                printf("%u.%u.%u.%u ", 
-                       dns_header[offset + j], 
-                       dns_header[offset + j + 1], 
-                       dns_header[offset + j + 2], 
-                       dns_header[offset + j + 3]);
-            } else {
-                for (int k = j; k < data_length; ++k) {
-                    printf("%u", dns_header[offset + k]);
-                    if (k < data_length - 1) {
-                        printf(".");
-                    }
-                }
-            }
-        }
+        process_dns_data(type, (dns_header+offset));
         if(verbosity == LOW) return 0; // stop after one rotation to have the data
         printf("\n");
         offset += data_length;
@@ -294,11 +320,8 @@ void parse_dns(const u_char *packet, size_t header_size){
 
         }
     }
-
-    offset += parse_dns_rr(dns_header, offset, an_count, DNS_SECTION_ANSWER);
+    offset = parse_dns_rr(dns_header, offset, an_count, DNS_SECTION_ANSWER);
     if(verbosity == LOW) return;
-    offset += parse_dns_rr(dns_header, offset, ns_count, DNS_SECTION_AUTHORITY);
-    offset += parse_dns_rr(dns_header, offset, ar_count, DNS_SECTION_ADDITIONAL);
-
-
+    offset = parse_dns_rr(dns_header, offset, ns_count, DNS_SECTION_AUTHORITY);
+    offset = parse_dns_rr(dns_header, offset, ar_count, DNS_SECTION_ADDITIONAL);
 }

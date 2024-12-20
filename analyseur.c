@@ -42,7 +42,7 @@ void packet_handler(u_char *verbos, const struct pcap_pkthdr *pkthdr, const u_ch
     // Formatting time to be readable 
     struct tm *tm_time = localtime(&pkthdr->ts.tv_sec); // conversion in tm struct
     strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_time);
-    printf("%s.%03ld ", buffer, pkthdr->ts.tv_usec);
+    printf("%s.%03d ", buffer, pkthdr->ts.tv_usec);
 
     // Parsing the packet 
     parse_packet(packet);

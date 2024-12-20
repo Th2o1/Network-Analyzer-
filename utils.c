@@ -91,7 +91,7 @@ void print_packet(const unsigned char *packet, int length) {
 
 
 void parse_ascii(const u_char *packet, size_t offset){
-
+    
     const u_char *payload = (packet+offset);
     if (packet_size - offset < 4) { // Case -> end transaction
         return;
