@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include "../global_value.h"
+
 
 
 typedef enum {
